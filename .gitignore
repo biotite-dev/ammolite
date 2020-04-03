@@ -127,3 +127,10 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# VS Code
+*.code-workspace
+.vscode/*
+
+# Temporarily disable freezing of dependency versions
+poetry.lock

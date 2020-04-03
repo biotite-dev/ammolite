@@ -1,0 +1,40 @@
+[tool.poetry]
+name = "biotite2pymol"
+version = "0.1.0"
+description = "Transfer structure data from Biotite to PyMOL"
+license = "BSD-3-Clause"
+authors = ["Patrick Kunzmann <patrick.kunzm@gmail.com>"]
+homepage = "https://biotite2pymol/biotite-python.org"
+repository = "https://github.com/biotite-dev/biotite2pymol"
+documentation = "https://biotite2pymol/biotite-python.org"
+keywords = [
+    "Bioinformatics",
+    "Computational biology",
+    "Data visualization"
+]
+classifiers = [
+    "Development Status :: 1 - Planning",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: BSD License",
+    "Natural Language :: English",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
+packages = [
+    { include = "biotite2pymol", from = "src" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+biotite = "^0.20.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
