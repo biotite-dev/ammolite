@@ -13,7 +13,7 @@ from .util import data_dir, unique_model_name
 @pytest.mark.parametrize(
     "path, state",
     itertools.product(
-        glob.glob(join(data_dir, "1l2y.cif")),
+        glob.glob(join(data_dir, "*.cif")),
         # AtomArray or AtomArrayStack
         [1, None]
     )
@@ -24,8 +24,7 @@ def test_conversions_both_dir(path, state):
     ref_array = pdbx.get_structure(pdbx_file, model=state)
     ref_array.bonds = struc.connect_via_residue_names(ref_array)
 
-    #launch(no_window=True)
-    launch()
+    launch(no_window=True)
     model_name = unique_model_name()
     set_model(model_name, ref_array)
     test_array = get_model(model_name, state, include_bonds=True)
