@@ -1,3 +1,4 @@
+import re
 import numpy as np
 import biotite
 from biotite.sequence import ProteinSequence
@@ -10,17 +11,33 @@ from chempy import Atom, Bond
 
 
 def get_model(model_name, state=None, extra_fields=None, include_bonds=False):
-    #temp_file_name = biotite.temp_file("cif")
-    #strucio.save_structure(temp_file_name, atoms)
-    #cmd.load(temp_file_name, model_name)
-    model = cmd.get_model(model_name)
-    array = convert_to_atom_array(model, extra_fields, include_bonds)
-    return array
+    if state is None:
+        model = cmd.get_model(model_name, state=1)
+        template = convert_to_atom_array(model, extra_fields, include_bonds)
+        coord = np.stack(
+            [cmd.get_coordset(model_name, state=i+1)
+             for i in range(cmd.count_states(model_name))]
+        )
+        return struc.from_template(template, coord)
+    else:
+        model = cmd.get_model(model_name, state=state)
+        return convert_to_atom_array(model, extra_fields, include_bonds)
 
 
 def set_model(model_name, atoms):
-    model = convert_to_chempy_model(atoms)
-    cmd.load_model(model, model_name)
+    if isinstance(atoms, struc.AtomArray) or \
+       (isinstance(atoms, struc.AtomArrayStack) and atoms.stack_depth == 1):
+            model = convert_to_chempy_model(atoms)
+            cmd.load_model(model, model_name)
+    elif isinstance(atoms, struc.AtomArrayStack):
+        # Use first model as template
+        model = convert_to_chempy_model(atoms[0])
+        cmd.load_model(model, model_name)
+        # Append states corresponding to all following models
+        for coord in atoms.coord[1:]:
+            cmd.load_coordset(coord, model_name)
+    else:
+        raise TypeError("Expected 'AtomArray' or 'AtomArrayStack'")
 
 
 def convert_to_atom_array(chempy_model, extra_fields=None, 
@@ -44,7 +61,7 @@ def convert_to_atom_array(chempy_model, extra_fields=None,
         dtype="U3"
     )
     atom_array.res_id = np.array(
-        [a.resi for a in atoms],
+        [a.resi_number for a in atoms],
         dtype=int
     )
     atom_array.ins_code = np.array(
