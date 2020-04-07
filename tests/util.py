@@ -3,15 +3,15 @@
 # information.
 
 import os.path
-import numpy as np
+import pymol
+from pymol import cmd
+from biotite2pymol import launch_pymol
 
-def unique_object_name():
-    """
-    Running multiple tests with the same model name leads to errors,
-    because PyMOL is not reset after a test.
-    The solution is to give each PyMOL object used in a test a unique
-    object name: a random digit drawn from a very large number. 
-    """
-    return str(np.random.randint(1_000_000_000_000_000))
+
+def launch_pymol_for_test():
+    # Do not use script-only interface,
+    # as this extremely slows down the tests
+    launch_pymol(["-qixF", "-W", "100", "-H", "100"])
+
 
 data_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "data")

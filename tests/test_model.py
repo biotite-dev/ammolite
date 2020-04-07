@@ -6,9 +6,9 @@ import pytest
 import biotite.structure as struc
 import biotite.structure.io.pdbx as pdbx
 from pymol import cmd
-from biotite2pymol import launch_pymol, select, to_biotite, to_pymol, \
+from biotite2pymol import launch_pymol, to_biotite, to_pymol, \
                           convert_to_chempy_model
-from .util import data_dir, unique_object_name
+from .util import data_dir, launch_pymol_for_test
 
 
 @pytest.mark.parametrize(
@@ -23,10 +23,10 @@ def test_to_biotite(path, state):
     pdbx_file = pdbx.PDBxFile()
     pdbx_file.read(path)
     ref_array = pdbx.get_structure(pdbx_file, model=state)
-    launch_pymol(no_window=True)
-    object_name = unique_object_name()
-    cmd.load(path, object_name)
-    test_array = to_biotite(object_name, state)
+    launch_pymol(pymol_test_options)
+    cmd.reinitialize()
+    cmd.load(path, "test")
+    test_array = to_biotite("test", state)
 
     for cat in ref_array.get_annotation_categories():
         assert (
@@ -50,10 +50,9 @@ def test_to_biotite(path, state):
     pdbx_file.read(path)
     ref_array = pdbx.get_structure(pdbx_file, model=1)
     
-    launch_pymol(no_window=True)
-    object_name = unique_object_name()
-    cmd.load(path, object_name)
-    test_array = to_biotite(object_name, state=1)
+    launch_pymol_for_test()
+    cmd.load(path, "test")
+    test_array = to_biotite("test", state=1)
 
     for cat in ref_array.get_annotation_categories():
         assert (
@@ -66,10 +65,9 @@ def test_to_biotite(path, state):
 
 @pytest.mark.parametrize("path", glob.glob(join(data_dir, "*.cif")))
 def test_to_pymol(path):
-    launch_pymol(no_window=True)
-    object_name = unique_object_name()
-    cmd.load(path, object_name)
-    ref_model = cmd.get_model(object_name, 1)
+    launch_pymol_for_test()
+    cmd.load(path, "test")
+    ref_model = cmd.get_model("test", 1)
     
     pdbx_file = pdbx.PDBxFile()
     pdbx_file.read(path)
@@ -111,10 +109,9 @@ def test_both_directions(path, state):
     ref_array = pdbx.get_structure(pdbx_file, model=state)
     ref_array.bonds = struc.connect_via_residue_names(ref_array)
 
-    launch_pymol(no_window=True)
-    object_name = unique_object_name()
-    to_pymol(object_name, ref_array)
-    test_array = to_biotite(object_name, state, include_bonds=True)
+    launch_pymol_for_test()
+    to_pymol("test", ref_array)
+    test_array = to_biotite("test", state, include_bonds=True)
     
     for cat in ref_array.get_annotation_categories():
         assert (
