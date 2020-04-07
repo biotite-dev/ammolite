@@ -2,8 +2,9 @@ import pymol
 from pymol import cmd
 
 
-def launch(no_startup_message=True, no_window=False, no_internal_gui=False,
-           no_external_gui=False, explicit_cli_options=None):
+def launch_pymol(no_startup_message=True, no_window=False,
+                 no_internal_gui=False, no_external_gui=False,
+                 explicit_cli_options=None):
     cli_command = ["pymol"]
     
     if explicit_cli_options is None:

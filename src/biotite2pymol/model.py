@@ -10,38 +10,39 @@ from chempy.models import Indexed as IndexedModel
 from chempy import Atom, Bond
 
 
-def get_model(model_name, state=None, extra_fields=None, include_bonds=False):
+def to_biotite(object_name, state=None, extra_fields=None,
+               include_bonds=False):
     if state is None:
-        model = cmd.get_model(model_name, state=1)
+        model = cmd.get_model(object_name, state=1)
         template = convert_to_atom_array(model, extra_fields, include_bonds)
         coord = np.stack(
-            [cmd.get_coordset(model_name, state=i+1)
-             for i in range(cmd.count_states(model_name))]
+            [cmd.get_coordset(object_name, state=i+1)
+             for i in range(cmd.count_states(object_name))]
         )
         return struc.from_template(template, coord)
     else:
-        model = cmd.get_model(model_name, state=state)
+        model = cmd.get_model(object_name, state=state)
         return convert_to_atom_array(model, extra_fields, include_bonds)
 
 
-def set_model(model_name, atoms):
+def to_pymol(object_name, atoms):
     if isinstance(atoms, struc.AtomArray) or \
        (isinstance(atoms, struc.AtomArrayStack) and atoms.stack_depth == 1):
             model = convert_to_chempy_model(atoms)
-            cmd.load_model(model, model_name)
+            cmd.load_model(model, object_name)
     elif isinstance(atoms, struc.AtomArrayStack):
         # Use first model as template
         model = convert_to_chempy_model(atoms[0])
-        cmd.load_model(model, model_name)
+        cmd.load_model(model, object_name)
         # Append states corresponding to all following models
         for coord in atoms.coord[1:]:
-            cmd.load_coordset(coord, model_name)
+            cmd.load_coordset(coord, object_name)
     else:
         raise TypeError("Expected 'AtomArray' or 'AtomArrayStack'")
 
 
 def convert_to_atom_array(chempy_model, extra_fields=None, 
-                              include_bonds=False):
+                          include_bonds=False):
     if extra_fields is None:
         extra_fields = []
     
