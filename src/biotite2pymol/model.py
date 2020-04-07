@@ -1,4 +1,4 @@
-import re
+import warnings
 import numpy as np
 import biotite
 from biotite.sequence import ProteinSequence
@@ -182,6 +182,10 @@ def convert_to_chempy_model(atom_array):
             bond.index = [i, j]
 
             model.add_bond(bond)
+    else:
+        warnings.warn(
+            "The given atom array (stack) has no associated bond information"
+        )
     
 
     return model

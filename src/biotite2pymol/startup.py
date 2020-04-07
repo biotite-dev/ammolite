@@ -2,10 +2,8 @@ import pymol
 from pymol import cmd
 
 
-def launch_pymol(options):
-    if isinstance(options, str):
-        options = [options]
-    pymol.finish_launching(["pymol"] + options)
+def launch_pymol(*args):
+    pymol.finish_launching(["pymol"] + list(args))
     cmd.reinitialize()
 
     # The selections only work properly,
