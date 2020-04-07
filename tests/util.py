@@ -9,7 +9,7 @@ from biotite2pymol import launch_pymol
 
 
 def launch_pymol_for_test():
-    # Do not use script-only interface,
+    # Do not use script-only interface (-c),
     # as this extremely slows down the tests
     launch_pymol(["-qixF", "-W", "100", "-H", "100"])
 
