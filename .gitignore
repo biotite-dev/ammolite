@@ -134,3 +134,6 @@ dmypy.json
 
 # Temporarily disable freezing of dependency versions
 poetry.lock
+
+# Files generated for documentation
+doc/demo/demo.gif
