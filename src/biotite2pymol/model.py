@@ -5,13 +5,18 @@ from biotite.sequence import ProteinSequence
 import biotite.structure as struc
 import biotite.structure.io as strucio
 import pymol
-from pymol import cmd
+from pymol import cmd as default_cmd
 from chempy.models import Indexed as IndexedModel
 from chempy import Atom, Bond
 
 
 def to_biotite(object_name, state=None, extra_fields=None,
-               include_bonds=False):
+               include_bonds=False, pymol_instance=None):
+    if pymol_instance is None:
+        cmd = default_cmd
+    else:
+        cmd = pymol_instance.cmd
+    
     if state is None:
         model = cmd.get_model(object_name, state=1)
         template = convert_to_atom_array(model, extra_fields, include_bonds)
@@ -25,7 +30,12 @@ def to_biotite(object_name, state=None, extra_fields=None,
         return convert_to_atom_array(model, extra_fields, include_bonds)
 
 
-def to_pymol(object_name, atoms):
+def to_pymol(object_name, atoms, pymol_instance=None):
+    if pymol_instance is None:
+        cmd = default_cmd
+    else:
+        cmd = pymol_instance.cmd
+    
     if isinstance(atoms, struc.AtomArray) or \
        (isinstance(atoms, struc.AtomArrayStack) and atoms.stack_depth == 1):
             model = convert_to_chempy_model(atoms)
