@@ -136,4 +136,4 @@ dmypy.json
 poetry.lock
 
 # Files generated for documentation
-doc/demo/demo.gif
+doc/_build
