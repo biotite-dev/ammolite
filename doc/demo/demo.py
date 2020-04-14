@@ -7,9 +7,8 @@ import biotite.database.rcsb as rcsb
 from biotite2pymol import launch_pymol, select, to_pymol
 from pymol import cmd
 
-#----------------------------------------------------------------------#
 
-launch_pymol("-qixkF", "-W", "400", "-H", "400")
+launch_pymol("-qixekF", "-W", "400", "-H", "400")
 
 #----------------------------------------------------------------------#
 
