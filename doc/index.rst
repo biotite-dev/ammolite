@@ -50,7 +50,7 @@ Either install the proprietary version with
 
   $ conda install -c schrodinger pymol
 
-or the free and open source variant with
+or the free and open-source variant with
 
   $ conda install -c tpeulen pymol-open-source
 
@@ -80,8 +80,6 @@ interpreter in interactive mode and typing
   pymol.finish_launching(["pymol", "-qk"])
 
 If no error shows up, the installation is correct.
-
-
 
 
 Usage
