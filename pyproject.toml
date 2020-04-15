@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "biotite2pymol"
-version = "0.1.0"
+version = "0.1.1"
 description = "Visualize structure data from Biotite with PyMOL"
 readme = "README.rst"
 license = "BSD-3-Clause"
