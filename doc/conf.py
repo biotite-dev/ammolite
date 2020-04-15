@@ -55,12 +55,15 @@ html_css_files = [
     "https://fonts.googleapis.com/css?" \
         "family=Crete+Round|Fira+Sans|&display=swap",
 ]
+html_favicon = "static/assets/biotite2pymol_icon_32p.png"
 htmlhelp_basename = "Biotite2PymolDoc"
 html_sidebars = {"**": ["about.html",
                         "navigation.html",
                         "searchbox.html",]}
 html_theme_options = {
     "description"   : "From Biotite to PyMOL - and back again",
+    "logo"          : "assets/biotite2pymol_logo.svg",
+    "logo_name"     : "false",
     "github_user"   : "biotite-dev",
     "github_repo"   : "biotite2pymol",
     "github_banner" : "true",
