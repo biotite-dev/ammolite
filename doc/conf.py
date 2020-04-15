@@ -58,9 +58,8 @@ html_css_files = [
 ]
 html_favicon = "static/assets/biotite2pymol_icon_32p.png"
 htmlhelp_basename = "Biotite2PymolDoc"
-html_sidebars = {"**": ["about.html",
-                        "navigation.html",
-                        "searchbox.html",]}
+# No sidebar
+html_sidebars = {"**": []}
 html_theme_options = {
     "description"   : "From Biotite to PyMOL - and back again",
     "logo"          : "assets/biotite2pymol_logo.svg",
@@ -68,10 +67,4 @@ html_theme_options = {
     "github_user"   : "biotite-dev",
     "github_repo"   : "biotite2pymol",
     "github_banner" : "true",
-    "github_button" : "true",
-    "github_type"   : "star",
-    "page_width"    : "1200px",
-    "fixed_sidebar" : "true",
-    
-    "sidebar_link_underscore" : "#FFFFFF"
 }
