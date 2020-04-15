@@ -1,7 +1,8 @@
 [tool.poetry]
 name = "biotite2pymol"
 version = "0.1.0"
-description = "Transfer structure data from Biotite to PyMOL"
+description = "Visualize structure data from Biotite with PyMOL"
+readme = "README.rst"
 license = "BSD-3-Clause"
 authors = ["Patrick Kunzmann <patrick.kunzm@gmail.com>"]
 homepage = "https://biotite2pymol/biotite-python.org"
