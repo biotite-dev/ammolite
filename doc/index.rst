@@ -37,7 +37,7 @@ Installation
   $ pip install biotite
 
 However, PyMOL (at least version 2.0) must also be installed and needs to be
-importable by your Python interpreter.
+importable by your Python interpreter:
 
 Installation via Conda
 ^^^^^^^^^^^^^^^^^^^^^^
