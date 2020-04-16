@@ -10,6 +10,7 @@ __version__ = "0.1.1"
 __name__ = "biotite2pymol"
 __author__ = "Patrick Kunzmann"
 
-from .startup import *
+from .display import *
 from .model import *
 from .selection import *
+from .startup import *
