@@ -1,0 +1,17 @@
+# Conda environment, that includes all packages that are necessary for
+# the complete biotite2pymol development process.
+
+name: biotite2pymol-dev
+
+channels:
+  - anaconda
+  - conda-forge
+  - tpeulen
+
+dependencies:
+  - python =3.8
+  - poetry >=1.0
+  - biotite >=0.20
+  - sphinx >=1.7
+  - numpydoc >=0.8
+  - pymol >=2.0
