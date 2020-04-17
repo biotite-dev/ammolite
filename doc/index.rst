@@ -197,3 +197,9 @@ Jupyter notebook support
 :func:`show()`.
 
 .. autofunction:: show
+
+
+Examples
+--------
+
+`A few examples are provided as Jupyter notebooks. <https://github.com/biotite-dev/biotite2pymol/tree/master/doc/examples>`_
