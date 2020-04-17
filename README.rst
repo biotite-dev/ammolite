@@ -1,3 +1,7 @@
+.. image:: doc/static/assets/biotite2pymol_logo.svg
+  :width: 300px
+  :align: center
+
 biotite2pymol - From Biotite to PyMOL and back again
 ====================================================
 
