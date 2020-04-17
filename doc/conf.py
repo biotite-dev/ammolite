@@ -30,7 +30,7 @@ source_suffix = [".rst"]
 master_doc = "index"
 
 project = "biotite2pymol"
-copyright = "2017-2020, the Biotite contributors. " \
+copyright = "2020, the Biotite contributors. " \
             "PyMOL is a trademark of Schrodinger, LLC"
 version = biotite2pymol.__version__
 
