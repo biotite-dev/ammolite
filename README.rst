@@ -15,7 +15,7 @@ via PyMOL's Python API:
 - Convert *PyMOL* objects into ``AtomArray`` and ``AtomArrayStack`` instances.
 - Use *Biotite*'s boolean masks for atom selection in *PyMOL*.
 
-Have a look at the `example Jupyter notebook <PyMOL <https://github.com/biotite-dev/biotite2pymol/blob/master/doc/examples/cytochrome.ipynb>`_.
+Have a look at the `example Jupyter notebook <https://github.com/biotite-dev/biotite2pymol/blob/master/doc/examples/cytochrome.ipynb>`_.
 
 |
 
