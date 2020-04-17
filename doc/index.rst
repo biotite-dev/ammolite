@@ -23,6 +23,11 @@ via PyMOL's Python API:
 .. image:: demo/demo.gif
 
 |
+
+.. contents::
+   :depth: 2
+
+|
 |
 |
 
@@ -36,13 +41,13 @@ Installation
 
   $ pip install biotite
 
-However, PyMOL (at least version 2.0) must also be installed and needs to be
+However, *PyMOL* (at least version 2.0) must also be installed and needs to be
 importable by your Python interpreter:
 
 Installation via Conda
 ^^^^^^^^^^^^^^^^^^^^^^
 
-The simplest and recommended way to install PyMOL in combination with
+The simplest and recommended way to install *PyMOL* in combination with
 *biotite2pymol* is via the *Conda* package manager.
 Either install the proprietary version with
 
@@ -60,7 +65,7 @@ contain bugs or could not work at all for your system.
 Installation from pymol.org
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Otherwise, if you have downloaded the PyMOL binary from
+Otherwise, if you have downloaded the *PyMOL* binary from
 `<https://pymol.org/>`_, add the install location the `$PYTHONPATH` path
 variable:
 
@@ -68,10 +73,10 @@ variable:
 
   $ TODO
 
-Note that this only works, if the Python version of your PyMOL2 installation
+Note that this only works, if the Python version of your *PyMOL* installation
 matches the version of your Python interpreter.
 
-The correct installation of PyMOL can be checked by opening your Python
+The correct installation of *PyMOL* can be checked by opening your Python
 interpreter in interactive mode and typing
 
 .. code-block:: python
@@ -85,7 +90,82 @@ If no error shows up, the installation is correct.
 Usage
 -----
 
+.. currentmodule:: biotite2pymol
 
-API Reference
--------------
+Launching PyMOL
+^^^^^^^^^^^^^^^
 
+The recommended way to invoke *PyMOL* in a Python script depends on whether a
+GUI should be displayed.
+If no GUI is required, we recommend using object-oriented *PyMOL*.
+
+.. code-block:: python
+
+  from pymol2 import PyMOL
+  from biotite2pymol import setup_parameters
+
+  pymol_app = PyMOL()
+  pymol_app.start()
+  setup_parameters(pymol_instance=pymol_app)
+  cmd = pymol_app.cmd
+  
+  # The molecule visualization stuff goes here
+
+  pymol_app.stop()
+
+The line with ``pymol_app.start()`` is essential here:
+Without this statement the following commands to *PyMOL* might lead to
+crashes.
+:func:`setup_parameters()` sets *PyMOL* parameters that are necessary for
+*biotite2pymol* to interact properly with *PyMOL*.
+
+.. autofunction:: setup_parameters
+
+For further demonstrations, on how to use object-oriented *PyMOL* with
+interactive Python in combination with *biotite2pymol*, have a look at
+the `example Jupyter notebooks <https://github.com/biotite-dev/biotite2pymol/tree/master/doc/examples>`_.
+
+|
+
+When the *PyMOL* GUI is necessary, the object-oriented *PyMOL* API is not
+available.
+Instead *PyMOL* can be launched in the following way:
+
+.. code-block:: python
+
+  from pymol import cmd
+  from biotite2pymol import launch_pymol
+
+  launch_pymol("-qixkF", "-W", "400", "-H", "400")
+
+  # The molecule visualization stuff goes here
+
+:func:`launch_pymol()` starts *PyMOL* using the given command line options,
+reinitializes it and sets necessary parameters.
+
+.. autofunction:: launch_pymol
+
+After that, the usual *PyMOL* commandos and the other functions from
+*biotite2pymol* can be used.
+
+Note that the *PyMOL* window will stay open after the end of the script.
+This can lead to issues when using interactive Python (e.g. *IPython*):
+The *PyMOL* window could not be closed by normal means and a forced
+termination might be necessary.
+This can be solved by using *PyMOL*'s integrated command line for executing
+Python.
+
+Transfer objects from Biotite to PyMOL and vice versa
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+After *PyMOL* initialization, a *Biotite* :class:`AtomArray` or
+:class:`AtomArrayStack` can be converted to *PyMOL* objects via
+:func:`to_pymol()`.
+Conversely, :func:`to_biotite()` converts a *PyMOL* object into an
+:class:`AtomArray` or :class:`AtomArrayStack`.
+
+Atom selections
+^^^^^^^^^^^^^^^
+
+Jupyter notebook support
+^^^^^^^^^^^^^^^^^^^^^^^^
