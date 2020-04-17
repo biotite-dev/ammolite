@@ -18,7 +18,7 @@ via PyMOL's Python API:
 
 |
 
-.. image:: demo/demo.gif
+.. image:: doc/demo/demo.gif
 
 |
 
