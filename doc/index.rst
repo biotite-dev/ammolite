@@ -146,7 +146,7 @@ reinitializes it and sets necessary parameters.
 .. autofunction:: launch_pymol
 
 After that, the usual *PyMOL* commandos and the other functions from
-*biotite2pymol* can be used.
+*biotite2pymol* are available.
 
 Note that the *PyMOL* window will stay open after the end of the script.
 This can lead to issues when using interactive Python (e.g. *IPython*):
@@ -164,8 +164,36 @@ After *PyMOL* initialization, a *Biotite* :class:`AtomArray` or
 Conversely, :func:`to_biotite()` converts a *PyMOL* object into an
 :class:`AtomArray` or :class:`AtomArrayStack`.
 
+.. autofunction:: to_pymol
+
+.. autofunction:: to_biotite
+
+Internally, :func:`to_pymol()` converts the :class:`AtomArray` is into a
+*PyMOL* :class:`chempy.models.Indexed` model at first.
+Then the model is added to the *PyMOL* session using the
+:func:`load_model` command.
+:func:`to_pymol()` obtains the model via the :func:`get_model()` command
+and converts it into an :class:`AtomArray`.
+These two internal conversion functions are also available:
+
+.. autofunction:: convert_to_chempy_model
+
+.. autofunction:: convert_to_atom_array
+
 Atom selections
 ^^^^^^^^^^^^^^^
 
+*PyMOL* uses selection strings to select atoms for its command.
+On the other side, *Biotite* uses boolean masks from *NumPy*.
+These boolean masks can be converted into selection strings via the
+:func:`select()` function.
+
+.. autofunction:: select
+
 Jupyter notebook support
 ^^^^^^^^^^^^^^^^^^^^^^^^
+
+*Jupyter* notebooks can directly display images rendered by *PyMOL* via
+:func:`show()`.
+
+.. autofunction:: show

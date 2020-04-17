@@ -12,6 +12,10 @@ from chempy import Atom, Bond
 
 def to_biotite(object_name, state=None, extra_fields=None,
                include_bonds=False, pymol_instance=None):
+    """
+    Convert a PyMOL object into a :class:`AtomArray` or
+    :class:`AtomArrayStack`.
+    """
     if pymol_instance is None:
         cmd = default_cmd
     else:
@@ -31,6 +35,10 @@ def to_biotite(object_name, state=None, extra_fields=None,
 
 
 def to_pymol(object_name, atoms, pymol_instance=None):
+    """
+    Convert an :class:`AtomArray` or :class:`AtomArrayStack` into a
+    *PyMOL* object and add it to the *PyMOL* workspace.
+    """
     if pymol_instance is None:
         cmd = default_cmd
     else:
