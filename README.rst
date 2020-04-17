@@ -1,6 +1,5 @@
 .. image:: https://raw.githubusercontent.com/biotite-dev/biotite2pymol/master/doc/static/assets/biotite2pymol_logo_s.png
   :alt: biotite2pymol logo
-  :width: 300px
   :align: center
 
 biotite2pymol - From Biotite to PyMOL and back again
