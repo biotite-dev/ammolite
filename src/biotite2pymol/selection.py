@@ -1,3 +1,6 @@
+__name__ = "biotite2pymol"
+__author__ = "Patrick Kunzmann"
+__all__ = ["select"]
 
 
 def select(object_name, mask):

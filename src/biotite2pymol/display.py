@@ -1,3 +1,7 @@
+__name__ = "biotite2pymol"
+__author__ = "Patrick Kunzmann"
+__all__ = ["show", "TimeoutError"]
+
 import tempfile
 import time
 import datetime
@@ -85,3 +89,4 @@ def TimeoutError(Exception):
     """
     Exception that is raised after time limit expiry in :func:`show()`.
     """
+    pass

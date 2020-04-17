@@ -1,3 +1,7 @@
+__name__ = "biotite2pymol"
+__author__ = "Patrick Kunzmann"
+__all__ = ["launch_pymol", "setup_parameters"]
+
 import pymol
 from pymol import cmd as default_cmd
 
