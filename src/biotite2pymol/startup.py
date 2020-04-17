@@ -10,6 +10,11 @@ def launch_pymol(*args):
     It starts *PyMOL* by calling :func:`pymol.finish_launching()`,
     reinitializes *PyMOL* to clear the workspace and sets up necessary
     parameters using :func:`setup_parameters()`.
+
+    Parameters
+    ----------
+    *args : str
+        The command line options given to *PyMOL*.
     """
     pymol.finish_launching(["pymol"] + list(args))
     default_cmd.reinitialize()
@@ -17,6 +22,14 @@ def launch_pymol(*args):
 
 
 def setup_parameters(pymol_instance=None):
+    """
+    Sets *PyMOL* parameters that are necessary for *biotite2pymol* to interact
+    properly with *PyMOL*.
+
+    pymol_instance : PyMOL, optional
+        When using the object-oriented *PyMOL* API the :class:`PyMOL`
+        object must be given here.
+    """
     if pymol_instance is None:
         cmd = default_cmd
     else:

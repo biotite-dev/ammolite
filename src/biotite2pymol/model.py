@@ -13,8 +13,38 @@ from chempy import Atom, Bond
 def to_biotite(object_name, state=None, extra_fields=None,
                include_bonds=False, pymol_instance=None):
     """
-    Convert a PyMOL object into a :class:`AtomArray` or
+    Convert a *PyMOL* object into an :class:`AtomArray` or
     :class:`AtomArrayStack`.
+
+    Parameters
+    ----------
+    object_name : str
+        The name of the *PyMOL* object to be converted.
+    state : int, optional
+        If this parameter is given, the function will return an
+        :class:`AtomArray` corresponding to the given state of the
+        *PyMOL* object.
+        If this parameter is omitted, an :class:`AtomArrayStack`
+        containing all states will be returned, even if the *PyMOL*
+        object contains only one state.
+    extra_fields : list of str, optional
+        The strings in the list are optional annotation categories
+        that should be stored in the output atom array (stack).
+        ``'b_factor'``, ``'occupancy'`` and``'charge'`` are valid
+        values.
+    include_bonds : bool, optional
+        If set to true, an associated :class:`BondList` will be created
+        for the returned atom array (stack).
+    pymol_instance : PyMOL, optional
+        When using the object-oriented *PyMOL* API the :class:`PyMOL`
+        object must be given here.
+    
+    Returns
+    -------
+    structure : AtomArray or AtomArrayStack
+        The converted structure.
+        Wheather an :class:`AtomArray` or :class:`AtomArrayStack` is
+        returned depends on the `state` parameter.
     """
     if pymol_instance is None:
         cmd = default_cmd
@@ -37,7 +67,17 @@ def to_biotite(object_name, state=None, extra_fields=None,
 def to_pymol(object_name, atoms, pymol_instance=None):
     """
     Convert an :class:`AtomArray` or :class:`AtomArrayStack` into a
-    *PyMOL* object and add it to the *PyMOL* workspace.
+    *PyMOL* object and add it to the *PyMOL* session.
+
+    Parameters
+    ----------
+    object_name : str
+        The name of the newly created *PyMOL* object.
+    atoms : AtomArray or AtomArrayStack
+        The structure to be converted.
+    pymol_instance : PyMOL, optional
+        When using the object-oriented *PyMOL* API the :class:`PyMOL`
+        object must be given here.
     """
     if pymol_instance is None:
         cmd = default_cmd
@@ -61,6 +101,28 @@ def to_pymol(object_name, atoms, pymol_instance=None):
 
 def convert_to_atom_array(chempy_model, extra_fields=None, 
                           include_bonds=False):
+    """
+    Convert a :class:`chempy.models.Indexed`
+    object into an :class:`AtomArray`.
+
+    Parameters
+    ----------
+    chempy_model : Indexed
+        The ``chempy`` model.
+    extra_fields : list of str, optional
+        The strings in the list are optional annotation categories
+        that should be stored in the output atom array.
+        ``'b_factor'``, ``'occupancy'`` and``'charge'`` are valid
+        values.
+    include_bonds : bool, optional
+        If set to true, an associated :class:`BondList` will be created
+        for the returned atom array.
+    
+    Returns
+    -------
+    atom_array : AtomArray
+        The converted structure.
+    """
     if extra_fields is None:
         extra_fields = []
     
@@ -139,6 +201,15 @@ def convert_to_atom_array(chempy_model, extra_fields=None,
 
 
 def convert_to_chempy_model(atom_array):
+    """
+    Convert an :class:`AtomArray` into a :class:`chempy.models.Indexed`
+    object.
+
+    Returns
+    -------
+    chempy_model : Indexed
+        The converted structure.
+    """
     model = IndexedModel()
 
     annot_cat = atom_array.get_annotation_categories()
