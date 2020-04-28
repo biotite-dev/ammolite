@@ -20,8 +20,7 @@ from .util import data_dir, launch_pymol_for_test
     )
 )
 def test_to_biotite(path, state):
-    pdbx_file = pdbx.PDBxFile()
-    pdbx_file.read(path)
+    pdbx_file = pdbx.PDBxFile.read(path)
     ref_array = pdbx.get_structure(pdbx_file, model=state)
     launch_pymol(pymol_test_options)
     cmd.reinitialize()
@@ -46,8 +45,7 @@ def test_to_biotite(path, state):
     )
 )
 def test_to_biotite(path, state):
-    pdbx_file = pdbx.PDBxFile()
-    pdbx_file.read(path)
+    pdbx_file = pdbx.PDBxFile.read(path)
     ref_array = pdbx.get_structure(pdbx_file, model=1)
     
     launch_pymol_for_test()
@@ -69,8 +67,7 @@ def test_to_pymol(path):
     cmd.load(path, "test")
     ref_model = cmd.get_model("test", 1)
     
-    pdbx_file = pdbx.PDBxFile()
-    pdbx_file.read(path)
+    pdbx_file = pdbx.PDBxFile.read(path)
     atom_array = pdbx.get_structure(
         pdbx_file, model=1,
         extra_fields=["b_factor", "occupancy", "charge"]
@@ -104,8 +101,7 @@ def test_to_pymol(path):
     )
 )
 def test_both_directions(path, state):
-    pdbx_file = pdbx.PDBxFile()
-    pdbx_file.read(path)
+    pdbx_file = pdbx.PDBxFile.read(path)
     ref_array = pdbx.get_structure(pdbx_file, model=state)
     ref_array.bonds = struc.connect_via_residue_names(ref_array)
 

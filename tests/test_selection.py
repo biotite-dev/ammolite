@@ -10,8 +10,7 @@ from .util import data_dir, launch_pymol_for_test
 SAMPLE_COUNT = 10
 @pytest.mark.parametrize("random_seed", [i for i in range(SAMPLE_COUNT)])
 def test_select(random_seed):
-    pdbx_file = pdbx.PDBxFile()
-    pdbx_file.read(join(data_dir, "1l2y.cif"))
+    pdbx_file = pdbx.PDBxFile.read(join(data_dir, "1l2y.cif"))
     array = pdbx.get_structure(pdbx_file, model=1)
     
     launch_pymol_for_test()

@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.colors as colors
-import biotite
 import biotite.structure as struc
 import biotite.structure.io.mmtf as mmtf
 import biotite.database.rcsb as rcsb
@@ -29,8 +28,7 @@ cmd.set_color("darkgreen",    colors.to_rgb(biotite.colors["darkgreen"  ]))
 #----------------------------------------------------------------------#
 
 # Fetch and load cytochrome C structure and remove water 
-mmtf_file = mmtf.MMTFFile()
-mmtf_file.read(rcsb.fetch("1C75", "mmtf"))
+mmtf_file = mmtf.MMTFFile.read(rcsb.fetch("1C75", "mmtf"))
 structure = mmtf.get_structure(mmtf_file, model=1, include_bonds=True)
 cyt_c = structure[structure.res_name != "HOH"]
 
