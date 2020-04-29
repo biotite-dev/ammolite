@@ -1,17 +1,20 @@
 from os.path import join
 import numpy as np
 import pytest
+import biotite.structure as struc
 import biotite.structure.io.pdbx as pdbx
 from pymol import cmd
 from biotite2pymol import launch_pymol, select, to_biotite, to_pymol
 from .util import data_dir, launch_pymol_for_test
 
 
-SAMPLE_COUNT = 10
+SAMPLE_COUNT = 20
 @pytest.mark.parametrize("random_seed", [i for i in range(SAMPLE_COUNT)])
 def test_select(random_seed):
     pdbx_file = pdbx.PDBxFile.read(join(data_dir, "1l2y.cif"))
     array = pdbx.get_structure(pdbx_file, model=1)
+    # Add bonds to avoid warning
+    array.bonds = struc.connect_via_residue_names(array)
     
     launch_pymol_for_test()
     # Use B factor as indicator if the selection was correctly applied
