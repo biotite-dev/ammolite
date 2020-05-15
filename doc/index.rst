@@ -1,10 +1,10 @@
-.. image:: static/assets/ammolite_logo.svg
+.. image:: static/assets/bioview_logo.svg
   :height: 200px
   :align: center
 
 |
 
-Ammolite - From Biotite to PyMOL and back again
+Bioview - From Biotite to PyMOL and back again
 ====================================================
 
 This package enables the transfer of structure related objects
@@ -36,11 +36,11 @@ via *PyMOL*'s Python API:
 Installation
 ------------
 
-*Ammolite* can be installed via *pip*:
+*Bioview* can be installed via *pip*:
 
 .. code-block:: console
 
-  $ pip install ammolite
+  $ pip install bioview
 
 However, *PyMOL* (at least version 2.0) must also be installed and needs to be
 importable by your Python interpreter:
@@ -49,7 +49,7 @@ Installation via Conda
 ^^^^^^^^^^^^^^^^^^^^^^
 
 The simplest and recommended way to install *PyMOL* in combination with
-*Ammolite* is via the *Conda* package manager.
+*Bioview* is via the *Conda* package manager.
 Either install the proprietary version with
 
 .. code-block:: console
@@ -91,7 +91,7 @@ If no error shows up, the installation is correct.
 Usage
 -----
 
-.. currentmodule:: ammolite
+.. currentmodule:: bioview
 
 Launching PyMOL
 ^^^^^^^^^^^^^^^
@@ -103,7 +103,7 @@ If no GUI is required, we recommend using object-oriented *PyMOL*.
 .. code-block:: python
 
   from pymol2 import PyMOL
-  from ammolite import setup_parameters
+  from bioview import setup_parameters
 
   pymol_app = PyMOL()
   pymol_app.start()
@@ -118,13 +118,13 @@ The line with ``pymol_app.start()`` is essential here:
 Without this statement the following commands to *PyMOL* might lead to
 crashes.
 :func:`setup_parameters()` sets *PyMOL* parameters that are necessary for
-*Ammolite* to interact properly with *PyMOL*.
+*Bioview* to interact properly with *PyMOL*.
 
 .. autofunction:: setup_parameters
 
 For further demonstrations, on how to use object-oriented *PyMOL* with
-interactive Python in combination with *Ammolite*, have a look at
-the `example Jupyter notebooks <https://github.com/biotite-dev/ammolite/tree/master/doc/examples>`_.
+interactive Python in combination with *Bioview*, have a look at
+the `example Jupyter notebooks <https://github.com/biotite-dev/bioview/tree/master/doc/examples>`_.
 
 |
 
@@ -135,7 +135,7 @@ Instead *PyMOL* can be launched in the following way:
 .. code-block:: python
 
   from pymol import cmd
-  from ammolite import launch_pymol
+  from bioview import launch_pymol
 
   launch_pymol("-qixkF", "-W", "400", "-H", "400")
 
@@ -147,7 +147,7 @@ reinitializes it and sets necessary parameters.
 .. autofunction:: launch_pymol
 
 After that, the usual *PyMOL* commandos and the other functions from
-*Ammolite* are available.
+*Bioview* are available.
 
 Note that the *PyMOL* window will stay open after the end of the script.
 This can lead to issues when using interactive Python (e.g. *IPython*):
@@ -203,4 +203,4 @@ Jupyter notebook support
 Examples
 --------
 
-`A few examples are provided as Jupyter notebooks. <https://github.com/biotite-dev/ammolite/tree/master/doc/examples>`_
+`A few examples are provided as Jupyter notebooks. <https://github.com/biotite-dev/bioview/tree/master/doc/examples>`_

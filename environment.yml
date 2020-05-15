@@ -1,7 +1,7 @@
 # Conda environment, that includes all packages that are necessary for
-# the complete Ammolite development process.
+# the complete Bioview development process.
 
-name: ammolite-dev
+name: bioview-dev
 
 channels:
   - anaconda
