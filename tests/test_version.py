@@ -1,6 +1,6 @@
 import re
 from os.path import join, dirname, realpath
-from biotite2pymol import __version__
+from ammolite import __version__
 
 
 def test_version():

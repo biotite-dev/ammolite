@@ -3,7 +3,7 @@ import matplotlib.colors as colors
 import biotite.structure as struc
 import biotite.structure.io.mmtf as mmtf
 import biotite.database.rcsb as rcsb
-from biotite2pymol import launch_pymol, select, to_pymol
+from ammolite import launch_pymol, select, to_pymol
 from pymol import cmd
 
 

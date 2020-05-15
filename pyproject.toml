@@ -1,13 +1,13 @@
 [tool.poetry]
-name = "biotite2pymol"
+name = "ammolite"
 version = "0.1.1"
 description = "Visualize structure data from Biotite with PyMOL"
 readme = "README.rst"
 license = "BSD-3-Clause"
 authors = ["Patrick Kunzmann <patrick.kunzm@gmail.com>"]
-homepage = "https://biotite2pymol.biotite-python.org"
-repository = "https://github.com/biotite-dev/biotite2pymol"
-documentation = "https://biotite2pymol/biotite-python.org"
+homepage = "https://ammolite.biotite-python.org"
+repository = "https://github.com/biotite-dev/ammolite"
+documentation = "https://ammolite.biotite-python.org"
 keywords = [
     "Bioinformatics",
     "Computational biology",
@@ -26,7 +26,7 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Bio-Informatics",
 ]
 packages = [
-    { include = "biotite2pymol", from = "src" },
+    { include = "ammolite", from = "src" },
 ]
 
 [tool.poetry.dependencies]
@@ -35,6 +35,8 @@ biotite = "^0.21"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
+sphinx = "^3.0"
+numpydoc = ">= 0.8"
 
 [build-system]
 requires = ["poetry>=0.12"]

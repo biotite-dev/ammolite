@@ -1,4 +1,4 @@
-__name__ = "biotite2pymol"
+__name__ = "ammolite"
 __author__ = "Patrick Kunzmann"
 __all__ = ["show", "TimeoutError"]
 
@@ -61,7 +61,7 @@ def show(size=None, use_ray=False, timeout=60.0, pymol_instance=None):
         ray = 0
     
     image_file = tempfile.NamedTemporaryFile(
-        delete=False, prefix="biotite2pymol", suffix=".png"
+        delete=False, prefix="ammolite_", suffix=".png"
     )
     image_file.close()
     

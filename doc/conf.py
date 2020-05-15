@@ -13,7 +13,7 @@ import sys
 doc_path = dirname(realpath(__file__))
 package_path = join(dirname(doc_path), "src")
 sys.path.insert(0, package_path)
-import biotite2pymol
+import ammolite
 
 
 #### General ####
@@ -29,10 +29,10 @@ templates_path = ["templates"]
 source_suffix = [".rst"]
 master_doc = "index"
 
-project = "biotite2pymol"
+project = "ammolite"
 copyright = "2020, the Biotite contributors. " \
             "PyMOL is a trademark of Schrodinger, LLC"
-version = biotite2pymol.__version__
+version = ammolite.__version__
 
 exclude_patterns = ["build"]
 
@@ -56,15 +56,15 @@ html_css_files = [
     "https://fonts.googleapis.com/css?" \
         "family=Crete+Round|Fira+Sans|&display=swap",
 ]
-html_favicon = "static/assets/biotite2pymol_icon_32p.png"
-htmlhelp_basename = "Biotite2PymolDoc"
+html_favicon = "static/assets/ammolite_icon_32p.png"
+htmlhelp_basename = "AmmoliteDoc"
 # No sidebar
 html_sidebars = {"**": []}
 html_theme_options = {
     "description"   : "From Biotite to PyMOL - and back again",
-    "logo"          : "assets/biotite2pymol_logo.svg",
+    "logo"          : "assets/ammolite_logo.svg",
     "logo_name"     : "false",
     "github_user"   : "biotite-dev",
-    "github_repo"   : "biotite2pymol",
+    "github_repo"   : "ammolite",
     "github_banner" : "true",
 }

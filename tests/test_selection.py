@@ -4,7 +4,7 @@ import pytest
 import biotite.structure as struc
 import biotite.structure.io.pdbx as pdbx
 from pymol import cmd
-from biotite2pymol import launch_pymol, select, to_biotite, to_pymol
+from ammolite import launch_pymol, select, to_biotite, to_pymol
 from .util import data_dir, launch_pymol_for_test
 
 

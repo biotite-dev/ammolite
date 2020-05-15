@@ -1,7 +1,7 @@
 # Conda environment, that includes all packages that are necessary for
-# the complete biotite2pymol development process.
+# the complete Ammolite development process.
 
-name: biotite2pymol-dev
+name: ammolite-dev
 
 channels:
   - anaconda

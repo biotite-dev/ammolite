@@ -1,8 +1,8 @@
-.. image:: https://raw.githubusercontent.com/biotite-dev/biotite2pymol/master/doc/static/assets/biotite2pymol_logo_s.png
-  :alt: biotite2pymol logo
+.. image:: https://raw.githubusercontent.com/biotite-dev/ammolite/master/doc/static/assets/ammolite_logo_s.png
+  :alt: Ammolite logo
   :align: center
 
-biotite2pymol - From Biotite to PyMOL and back again
+Ammolite - From Biotite to PyMOL and back again
 ====================================================
 
 This package enables the transfer of structure related objects
@@ -15,12 +15,12 @@ via PyMOL's Python API:
 - Convert *PyMOL* objects into ``AtomArray`` and ``AtomArrayStack`` instances.
 - Use *Biotite*'s boolean masks for atom selection in *PyMOL*.
 
-Have a look at the `example Jupyter notebook <https://github.com/biotite-dev/biotite2pymol/blob/master/doc/examples/cytochrome.ipynb>`_.
+Have a look at the `example Jupyter notebook <https://github.com/biotite-dev/ammolite/blob/master/doc/examples/cytochrome.ipynb>`_.
 
 |
 
-.. image:: https://raw.githubusercontent.com/biotite-dev/biotite2pymol/master/doc/demo/demo.gif
-    :alt: biotite2pymol demo
+.. image:: https://raw.githubusercontent.com/biotite-dev/ammolite/master/doc/demo/demo.gif
+    :alt: ammolite demo
 
 |
 

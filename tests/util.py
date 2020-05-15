@@ -5,7 +5,7 @@
 import os.path
 import pymol
 from pymol import cmd
-from biotite2pymol import launch_pymol
+from ammolite import launch_pymol
 
 
 def launch_pymol_for_test():
