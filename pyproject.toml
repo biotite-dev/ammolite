@@ -1,13 +1,13 @@
 [tool.poetry]
-name = "bioview"
+name = "ammolite"
 version = "0.1.1"
 description = "Visualize structure data from Biotite with PyMOL"
 readme = "README.rst"
 license = "BSD-3-Clause"
 authors = ["Patrick Kunzmann <patrick.kunzm@gmail.com>"]
-homepage = "https://bioview.biotite-python.org"
-repository = "https://github.com/biotite-dev/bioview"
-documentation = "https://bioview.biotite-python.org"
+homepage = "https://ammolite.biotite-python.org"
+repository = "https://github.com/biotite-dev/ammolite"
+documentation = "https://ammolite.biotite-python.org"
 keywords = [
     "Bioinformatics",
     "Computational biology",
@@ -26,7 +26,7 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Bio-Informatics",
 ]
 packages = [
-    { include = "bioview", from = "src" },
+    { include = "ammolite", from = "src" },
 ]
 
 [tool.poetry.dependencies]

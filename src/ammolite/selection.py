@@ -1,4 +1,4 @@
-__name__ = "bioview"
+__name__ = "ammolite"
 __author__ = "Patrick Kunzmann"
 __all__ = ["select"]
 

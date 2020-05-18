@@ -1,4 +1,4 @@
-__name__ = "bioview"
+__name__ = "ammolite"
 __author__ = "Patrick Kunzmann"
 __all__ = ["launch_pymol", "setup_parameters"]
 
@@ -27,7 +27,7 @@ def launch_pymol(*args):
 
 def setup_parameters(pymol_instance=None):
     """
-    Sets *PyMOL* parameters that are necessary for *bioview* to interact
+    Sets *PyMOL* parameters that are necessary for *ammolite* to interact
     properly with *PyMOL*.
 
     pymol_instance : PyMOL, optional

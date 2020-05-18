@@ -6,7 +6,7 @@ import pytest
 import biotite.structure as struc
 import biotite.structure.io.pdbx as pdbx
 from pymol import cmd
-from bioview import launch_pymol, to_biotite, to_pymol, \
+from ammolite import launch_pymol, to_biotite, to_pymol, \
                           convert_to_chempy_model
 from .util import data_dir, launch_pymol_for_test
 

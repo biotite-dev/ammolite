@@ -1,4 +1,4 @@
-__name__ = "bioview"
+__name__ = "ammolite"
 __author__ = "Patrick Kunzmann"
 __all__ = ["to_biotite", "to_pymol",
            "convert_to_atom_array", "convert_to_chempy_model"]
