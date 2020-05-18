@@ -10,7 +10,7 @@ __version__ = "0.1.1"
 __name__ = "ammolite"
 __author__ = "Patrick Kunzmann"
 
+from .convert import *
 from .display import *
-from .model import *
-from .selection import *
+from .object import *
 from .startup import *

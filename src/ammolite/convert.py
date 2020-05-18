@@ -1,110 +1,18 @@
 __name__ = "ammolite"
 __author__ = "Patrick Kunzmann"
-__all__ = ["to_biotite", "to_pymol",
-           "convert_to_atom_array", "convert_to_chempy_model"]
+__all__ = ["convert_to_atom_array", "convert_to_chempy_model"]
 
 import warnings
 import numpy as np
 import biotite
 from biotite.sequence import ProteinSequence
 import biotite.structure as struc
-import biotite.structure.io as strucio
 import pymol
-from pymol import cmd as default_cmd
 from chempy.models import Indexed as IndexedModel
 from chempy import Atom, Bond
 
 
-def to_biotite(object_name, state=None, extra_fields=None,
-               include_bonds=False, pymol_instance=None):
-    """
-    Convert a *PyMOL* object into an :class:`AtomArray` or
-    :class:`AtomArrayStack`.
-
-    Parameters
-    ----------
-    object_name : str
-        The name of the *PyMOL* object to be converted.
-    state : int, optional
-        If this parameter is given, the function will return an
-        :class:`AtomArray` corresponding to the given state of the
-        *PyMOL* object.
-        If this parameter is omitted, an :class:`AtomArrayStack`
-        containing all states will be returned, even if the *PyMOL*
-        object contains only one state.
-    extra_fields : list of str, optional
-        The strings in the list are optional annotation categories
-        that should be stored in the output atom array (stack).
-        ``'b_factor'``, ``'occupancy'`` and``'charge'`` are valid
-        values.
-    include_bonds : bool, optional
-        If set to true, an associated :class:`BondList` will be created
-        for the returned atom array (stack).
-    pymol_instance : PyMOL, optional
-        When using the object-oriented *PyMOL* API the :class:`PyMOL`
-        object must be given here.
-    
-    Returns
-    -------
-    structure : AtomArray or AtomArrayStack
-        The converted structure.
-        Wheather an :class:`AtomArray` or :class:`AtomArrayStack` is
-        returned depends on the `state` parameter.
-    """
-    if pymol_instance is None:
-        cmd = default_cmd
-    else:
-        cmd = pymol_instance.cmd
-    
-    if state is None:
-        model = cmd.get_model(object_name, state=1)
-        template = convert_to_atom_array(model, extra_fields, include_bonds)
-        coord = np.stack(
-            [cmd.get_coordset(object_name, state=i+1)
-             for i in range(cmd.count_states(object_name))]
-        )
-        return struc.from_template(template, coord)
-    else:
-        model = cmd.get_model(object_name, state=state)
-        return convert_to_atom_array(model, extra_fields, include_bonds)
-
-
-def to_pymol(object_name, atoms, pymol_instance=None):
-    """
-    Convert an :class:`AtomArray` or :class:`AtomArrayStack` into a
-    *PyMOL* object and add it to the *PyMOL* session.
-
-    Parameters
-    ----------
-    object_name : str
-        The name of the newly created *PyMOL* object.
-    atoms : AtomArray or AtomArrayStack
-        The structure to be converted.
-    pymol_instance : PyMOL, optional
-        When using the object-oriented *PyMOL* API the :class:`PyMOL`
-        object must be given here.
-    """
-    if pymol_instance is None:
-        cmd = default_cmd
-    else:
-        cmd = pymol_instance.cmd
-    
-    if isinstance(atoms, struc.AtomArray) or \
-       (isinstance(atoms, struc.AtomArrayStack) and atoms.stack_depth == 1):
-            model = convert_to_chempy_model(atoms)
-            cmd.load_model(model, object_name)
-    elif isinstance(atoms, struc.AtomArrayStack):
-        # Use first model as template
-        model = convert_to_chempy_model(atoms[0])
-        cmd.load_model(model, object_name)
-        # Append states corresponding to all following models
-        for coord in atoms.coord[1:]:
-            cmd.load_coordset(coord, object_name)
-    else:
-        raise TypeError("Expected 'AtomArray' or 'AtomArrayStack'")
-
-
-def convert_to_atom_array(chempy_model, extra_fields=None, 
+def convert_to_atom_array(chempy_model, altloc="all", extra_fields=None, 
                           include_bonds=False):
     """
     Convert a :class:`chempy.models.Indexed`
@@ -114,6 +22,16 @@ def convert_to_atom_array(chempy_model, extra_fields=None,
     ----------
     chempy_model : Indexed
         The ``chempy`` model.
+    altloc : {'first', 'occupancy', 'all'}
+        This parameter defines how *altloc* IDs are handled:
+            - ``'first'`` - Use atoms that have the first *altloc* ID
+              appearing in a residue.
+            - ``'occupancy'`` - Use atoms that have the *altloc* ID
+              with the highest occupancy for a residue.
+            - ``'all'`` - Use all atoms.
+              Note that this leads to duplicate atoms.
+              When this option is chosen, the ``altloc_id`` annotation
+              array is added to the returned structure.
     extra_fields : list of str, optional
         The strings in the list are optional annotation categories
         that should be stored in the output atom array.
@@ -133,15 +51,25 @@ def convert_to_atom_array(chempy_model, extra_fields=None,
     
     
     atoms = chempy_model.atom
-    # Ignore alternative locations
-    atoms = [atom for atom in atoms if atom.alt in ("", "A")]
 
     bonds = chempy_model.bond
 
     
     atom_array = struc.AtomArray(len(atoms))
+
+
+    # Required for later altloc filtering
+    altloc_ids = np.array(
+        [a.alt if hasattr(a, "alt") else "" for a in atoms],
+        dtype="U1"
+    )
+    occupancy = np.array(
+        [a.occupancy if hasattr(a, "occupancy") else 1.0 for a in atoms],
+        dtype=float
+    )
     
     
+    # Add annotation arrays
     atom_array.chain_id = np.array(
         [a.chain for a in atoms],
         dtype="U3"
@@ -171,29 +99,36 @@ def convert_to_atom_array(chempy_model, extra_fields=None,
         dtype="U2"
     )
     
+    if altloc == "all":
+        atom_array.set_annotation(
+            "altloc_id",
+            np.array([a.alt for a in atoms], dtype="U1")
+        )
     if "b_factor" in extra_fields:
-        atom_array.b_factor = np.array(
-            [a.b for a in atoms],
-            dtype=float
+        atom_array.set_annotation(
+            "b_factor",
+            np.array([a.b for a in atoms], dtype=float)
         )
     if "occupancy" in extra_fields:
-        atom_array.occupancy = np.array(
-            [a.q for a in atoms],
-            dtype=float
+        atom_array.set_annotation(
+            "occupancy",
+            np.array([a.occupancy for a in atoms], dtype=float)
         )
     if "charge" in extra_fields:
-        atom_array.charge = np.array(
-            [a.formal_charge for a in atoms],
-            dtype=int
+        atom_array.set_annotation(
+            "charge",
+            np.array([a.formal_charge for a in atoms], dtype=int)
         )
     
 
+    # Set coordinates
     atom_array.coord = np.array(
         [a.coord for a in atoms],
         dtype=np.float32
     )
 
 
+    # Add bonds
     if include_bonds:
         bond_array = np.array(
             [[b.index[0], b.index[1], b.order] for b in bonds],
@@ -202,7 +137,20 @@ def convert_to_atom_array(chempy_model, extra_fields=None,
         atom_array.bonds = struc.BondList(len(atoms), bond_array)
     
 
-    return atom_array
+    # Filter altloc IDs and return
+    if altloc == "occupancy":
+        return atom_array[
+            struc.filter_highest_occupancy_altloc(
+                atom_array, altloc_ids, occupancy.astype(float)
+            )
+        ]
+    # 'first' is also fallback if model has no occupancy information
+    elif altloc == "first":
+        return atom_array[filter_first_altloc(atom_array, altloc_ids)]
+    elif altloc == "all":
+        return atom_array
+    else:
+        raise ValueError(f"'{altloc}' is not a valid 'altloc' option")
 
 
 def convert_to_chempy_model(atom_array):

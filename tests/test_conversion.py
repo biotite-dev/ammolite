@@ -6,8 +6,7 @@ import pytest
 import biotite.structure as struc
 import biotite.structure.io.pdbx as pdbx
 from pymol import cmd
-from ammolite import launch_pymol, to_biotite, to_pymol, \
-                          convert_to_chempy_model
+from ammolite import PyMOLObject, convert_to_chempy_model
 from .util import data_dir, launch_pymol_for_test
 
 
@@ -21,38 +20,15 @@ from .util import data_dir, launch_pymol_for_test
 )
 def test_to_biotite(path, state):
     pdbx_file = pdbx.PDBxFile.read(path)
-    ref_array = pdbx.get_structure(pdbx_file, model=state)
-    launch_pymol(pymol_test_options)
-    cmd.reinitialize()
-    cmd.load(path, "test")
-    test_array = to_biotite("test", state)
-
-    for cat in ref_array.get_annotation_categories():
-        assert (
-            test_array.get_annotation(cat) == ref_array.get_annotation(cat)
-        ).all()
-    assert np.allclose(test_array.coord, ref_array.coord)
-    # Do not test bonds,
-    # as PyMOL determines bonds in another way than Biotite
-
-
-@pytest.mark.parametrize(
-    "path, state",
-    itertools.product(
-        glob.glob(join(data_dir, "*.cif")),
-        # AtomArray or AtomArrayStack
-        [1, None]
-    )
-)
-def test_to_biotite(path, state):
-    pdbx_file = pdbx.PDBxFile.read(path)
-    ref_array = pdbx.get_structure(pdbx_file, model=1)
+    ref_array = pdbx.get_structure(pdbx_file, model=state, altloc="all")
     
     launch_pymol_for_test()
     cmd.load(path, "test")
-    test_array = to_biotite("test", state=1)
+    test_array = PyMOLObject("test").to_structure(state=state)
 
-    for cat in ref_array.get_annotation_categories():
+    for cat in [
+        c for c in ref_array.get_annotation_categories() if c != "altloc_id"
+    ]:
         assert (
             test_array.get_annotation(cat) == ref_array.get_annotation(cat)
         ).all()
@@ -106,8 +82,8 @@ def test_both_directions(path, state):
     ref_array.bonds = struc.connect_via_residue_names(ref_array)
 
     launch_pymol_for_test()
-    to_pymol("test", ref_array)
-    test_array = to_biotite("test", state, include_bonds=True)
+    test_array = PyMOLObject.from_structure(ref_array) \
+                            .to_structure(state=state, include_bonds=True)
     
     for cat in ref_array.get_annotation_categories():
         assert (
