@@ -297,17 +297,124 @@ class PyMOLObject:
 
 
 
-    # TODO: def alter()
-    # TODO: def cartoon()
-    # TODO: def center()
-    # TODO: def clip()
+
+    @validate
+    def alter(self, selection, expression):
+        """
+        Change atomic properties using an expression evaluated
+        within a temporary namespace for each atom.
+
+        This method is a thin wrapper around the *PyMOL* ``alter()``
+        command.
+
+        Parameters
+        ----------
+        selection : str or ndarray, dtype=bool
+            A boolean mask or a *PyMOL* selection expression that
+            selects the atoms of this *PyMOL* object to apply the
+            command on.
+        expression : str
+            The properties of the selected atoms are changed based on
+            this expression.
+        """
+        self._cmd.alter(self._into_selection(selection), expression)
+    
+    @validate
+    def cartoon(self, type, selection=None):
+        """
+        Change the default cartoon representation for a selection
+        of atoms.
+
+        This method is a thin wrapper around the *PyMOL* ``cartoon()``
+        command.
+
+        Parameters
+        ----------
+        type : str
+            One of
+            - ``'automatic'``,
+            - ``'skip'``,
+            - ``'loop'``,
+            - ``'rectangle'``,
+            - ``'oval'``,
+            - ``'tube'``,
+            - ``'arrow'`` or
+            - ``'dumbbell'``.
+        selection : str or ndarray, dtype=bool, optional
+            A boolean mask or a *PyMOL* selection expression that
+            selects the atoms of this *PyMOL* object to apply the
+            command on.
+            By default, the command is applied on all atoms of this
+            *PyMOL* object.
+        """
+        self._cmd.cartoon(type, self._into_selection(selection))
+    
+    @validate
+    def center(self, selection=None, state=None, origin=True):
+        """
+        Translate the window, the clipping slab, and the
+        origin to a point centered within the atom selection.
+
+        This method is a thin wrapper around the *PyMOL* ``center()``
+        command.
+
+        Parameters
+        ----------
+        selection : str or ndarray, dtype=bool, optional
+            A boolean mask or a *PyMOL* selection expression that
+            selects the atoms of this *PyMOL* object to apply the
+            command on.
+            By default, the command is applied on all atoms of this
+            *PyMOL* object.
+        state : int, optional
+            The state to apply the command on.
+            By default, the command is applied on all states of this
+            *PyMOL* object.
+        origin : bool, optional
+            If set to false, the origin is left unchanged.
+        """
+        state = 0 if state is None else state
+        self._cmd.center(self._into_selection(selection), state, int(origin))
+
+    @validate
+    def clip(self, mode, distance, selection=None, state=None):
+        """
+        Alter the positions of the near and far clipping planes.
+
+        This method is a thin wrapper around the *PyMOL* ``clip()``
+        command.
+
+        Parameters
+        ----------
+        mode : {'near', 'far', 'move', 'slab', 'atoms'}
+            - ``near`` - Move the near plane
+            - ``far`` - Move the far plane
+            - ``move`` - Move slab
+            - ``slab`` - Set slab thickness
+            - ``atoms`` - clip selected atoms with the given buffer
+        distance : float
+            The meaning of this parameter depends on `mode`.
+        selection : str or ndarray, dtype=bool, optional
+            A boolean mask or a *PyMOL* selection expression that
+            selects the atoms of this *PyMOL* object to apply the
+            command on.
+            By default, the command is applied on all atoms of this
+            *PyMOL* object.
+        state : int, optional
+            The state to apply the command on.
+            By default, the command is applied on all states of this
+            *PyMOL* object.
+        """
+        state = 0 if state is None else state
+        self._cmd.clip(mode, distance, self._into_selection(selection), state)
     
     @validate
     def color(self, color, selection=None):
         """
         Change the color of atoms.
 
-        This is a thin wrapper around the *PyMOL* ``color()`` command.
+        This method is a thin wrapper around the *PyMOL* ``color()``
+        command.
 
         Parameters
         ----------
@@ -339,23 +446,250 @@ class PyMOLObject:
                 )
         self._cmd.color(color_name, self._into_selection(selection))
 
-    # TODO: def desaturate()
-    # TODO: def disable()
-    # TODO: def distance()
-    # TODO: def dss()
-    # TODO: def enable()
-    # TODO: def hide()
-    # TODO: def indicate()
-    # TODO: def orient()
-    # TODO: def origin()
-    # TODO: def select()
+    @validate
+    def desaturate(self, selection=None, a=0.5):
+        """
+        Desaturate the colors of the selected atoms.
+
+        This method is a thin wrapper around the *PyMOL*
+        ``desaturate()`` command.
+
+        Parameters
+        ----------
+        selection : str or ndarray, dtype=bool, optional
+            A boolean mask or a *PyMOL* selection expression that
+            selects the atoms of this *PyMOL* object to apply the
+            command on.
+            By default, the command is applied on all atoms of this
+            *PyMOL* object.
+        a : float
+            A desaturation factor between 0.0 and 1.0.
+        """
+        self._cmd.desaturate(self._into_selection(selection), a)
+    
+    @validate
+    def disable(self, selection=None):
+        """
+        Turn off display of the selected atoms.
+
+        This method is a thin wrapper around the *PyMOL* ``disable()``
+        command.
+
+        Parameters
+        ----------
+        selection : str or ndarray, dtype=bool, optional
+            A boolean mask or a *PyMOL* selection expression that
+            selects the atoms of this *PyMOL* object to apply the
+            command on.
+            By default, the command is applied on all atoms of this
+            *PyMOL* object.
+        """
+        self._cmd.disable(self._into_selection(selection))
+    
+    @validate
+    def distance(self, name, selection1, selection2, mode):
+        """
+        Create a new distance object between two atom selections.
+
+        This method is a thin wrapper around the *PyMOL* ``distance()``
+        command.
+
+        Parameters
+        ----------
+        name : str
+            Name of the distance object to create.
+        selection1, selection2 : str or ndarray, dtype=bool, optional
+            A boolean mask or a *PyMOL* selection expression that
+            selects the atoms of this *PyMOL* object to apply the
+            command on.
+        cutoff : float
+            The longest distance to show.
+        mode: {0, 1, 2, 3, 4}
+        - ``0`` - All interatomic distances
+        - ``1`` - Only bond distances
+        - ``2`` - Only polar contact distances
+        - ``3`` - All interatomic distances,
+          use distance_exclusion setting
+        - ``4`` - Distance between centroids
+        """
+        self._cmd.distance(self._into_selection(selection1))
+    
+    @validate
+    def dss(self, selection=None, state=None):
+        """
+        Determine the secondary structure of the selected atoms.
+
+        This method is a thin wrapper around the *PyMOL* ``dss()``
+        command.
+
+        Parameters
+        ----------
+        selection : str or ndarray, dtype=bool, optional
+            A boolean mask or a *PyMOL* selection expression that
+            selects the atoms of this *PyMOL* object to apply the
+            command on.
+            By default, the command is applied on all atoms of this
+            *PyMOL* object.
+        state : int, optional
+            The state to apply the command on.
+            By default, the command is applied on all states of this
+            *PyMOL* object.
+        """
+        state = 0 if state is None else state
+        self._cmd.dss(self._into_selection(selection), state)
+    
+    @validate
+    def enable(self, selection=None):
+        """
+        Turn on display of the selected atoms.
+
+        This method is a thin wrapper around the *PyMOL* ``enable()``
+        command.
+
+        Parameters
+        ----------
+        selection : str or ndarray, dtype=bool, optional
+            A boolean mask or a *PyMOL* selection expression that
+            selects the atoms of this *PyMOL* object to apply the
+            command on.
+            By default, the command is applied on all atoms of this
+            *PyMOL* object.
+        """
+        self._cmd.enable(self._into_selection(selection))
+
+    @validate
+    def hide(self, representation, selection=None):
+        """
+        Turn off an atom representation (e.g. sticks, spheres, etc.).
+
+        This method is a thin wrapper around the *PyMOL* ``hide()``
+        command.
+
+        Parameters
+        ----------
+        representation : str
+            One of
+            - ``'lines'``,
+            - ``'spheres'``,
+            - ``'mesh'``,
+            - ``'ribbon'``,
+            - ``'cartoon'``,
+            - ``'sticks'``,
+            - ``'dots'``,
+            - ``'surface'``,
+            - ``'label'``,
+            - ``'extent'``,
+            - ``'nonbonded'``,
+            - ``'nb_spheres'``,
+            - ``'slice'`` or
+            - ``'cell'``.
+        selection : str or ndarray, dtype=bool, optional
+            A boolean mask or a *PyMOL* selection expression that
+            selects the atoms of this *PyMOL* object to apply the
+            command on.
+            By default, the command is applied on all atoms of this
+            *PyMOL* object.
+        """
+        self._cmd.hide(representation, self._into_selection(selection))
+    
+    @validate
+    def indicate(self, selection=None):
+        """
+        Show a visual representation of the selected atoms.
+
+        This method is a thin wrapper around the *PyMOL* ``indicate()``
+        command.
+
+        Parameters
+        ----------
+        selection : str or ndarray, dtype=bool, optional
+            A boolean mask or a *PyMOL* selection expression that
+            selects the atoms of this *PyMOL* object to apply the
+            command on.
+            By default, the command is applied on all atoms of this
+            *PyMOL* object.
+        """
+        self._cmd.indicate(self._into_selection(selection))
+    
+    @validate
+    def orient(self, selection=None, state=None):
+        """
+        Align the principal components of the selected atoms with the
+        *xyz* axes.
+
+        This method is a thin wrapper around the *PyMOL* ``orient()``
+        command.
+
+        Parameters
+        ----------
+        selection : str or ndarray, dtype=bool, optional
+            A boolean mask or a *PyMOL* selection expression that
+            selects the atoms of this *PyMOL* object to apply the
+            command on.
+            By default, the command is applied on all atoms of this
+            *PyMOL* object.
+        state : int, optional
+            The state to apply the command on.
+            By default, the command is applied on all states of this
+            *PyMOL* object.
+        """
+        state = 0 if state is None else state
+        self._cmd.orient(self._into_selection(selection), state)
+    
+    @validate
+    def origin(self, selection=None, state=None):
+        """
+        Set the center of rotation about the selected atoms.
+
+        This method is a thin wrapper around the *PyMOL* ``origin()``
+        command.
+
+        Parameters
+        ----------
+        selection : str or ndarray, dtype=bool, optional
+            A boolean mask or a *PyMOL* selection expression that
+            selects the atoms of this *PyMOL* object to apply the
+            command on.
+            By default, the command is applied on all atoms of this
+            *PyMOL* object.
+        state : int, optional
+            The state to apply the command on.
+            By default, the command is applied on all states of this
+            *PyMOL* object.
+        """
+        state = 0 if state is None else state
+        self._cmd.origin(
+            selection=self._into_selection(selection), state=state
+        )
+    
+    @validate
+    def select(self, name, selection=None):
+        """
+        Create a named selection object from the selected atoms.
+
+        This method is a thin wrapper around the *PyMOL* ``select()``
+        command.
+
+        Parameters
+        ----------
+        name : str
+            Name of the selection object to create.
+        selection : str or ndarray, dtype=bool, optional
+            A boolean mask or a *PyMOL* selection expression that
+            selects the atoms of this *PyMOL* object to apply the
+            command on.
+            By default, the command is applied on all atoms of this
+            *PyMOL* object.
+        """
+        self._cmd.select(name, self._into_selection(selection))
 
     @validate
     def set(self, name, value, selection=None, state=None):
         """
         Change per-atom settings.
 
-        This is a thin wrapper around the *PyMOL* ``set()`` command.
+        This method is a thin wrapper around the *PyMOL* ``set()``
+        command.
 
         Parameters
         ----------
@@ -385,7 +719,7 @@ class PyMOLObject:
             *PyMOL* object.
         """
         state = 0 if state is None else state
-        self._cmd.set(name, str(value), self._into_selection(selection), state)
+        self._cmd.set(name, value, self._into_selection(selection), state)
 
     @validate
     def set_bond(self, value, selection1=None, selection2=None, state=None):
@@ -393,22 +727,20 @@ class PyMOLObject:
         Change per-bond settings for all bonds which exist
         between two atom selections.
 
-        This is a thin wrapper around the *PyMOL* ``set_bond()`` command.
+        This method is a thin wrapper around the *PyMOL* ``set_bond()``
+        command.
 
         Parameters
         ----------
         name : str
             The name of the setting to be changed.
             One of
-            - ``'sphere_color'``,
-            - ``'surface_color'``,
-            - ``'mesh_color'``,
-            - ``'label_color'``,
-            - ``'dot_color'``,
-            - ``'cartoon_color'``,
-            - ``'ribbon_color'``,
-            - ``'transparency'`` (for surfaces) or
-            - ``'sphere_transparency'``.
+            - ``'valence'``,
+            - ``'line_width'``,
+            - ``'line_color'``,
+            - ``'stick_radius'``,
+            - ``'stick_color'`` or
+            - ``'stick_transparency'.
         value : object
             The new value for the given setting name.
         selection1, selection2 : str or ndarray, dtype=bool, optional
@@ -426,7 +758,7 @@ class PyMOLObject:
         state = 0 if state is None else state
         selection2 = selection1 if selection2 is None else selection2
         self._cmd.set_bond(
-            name, str(value),
+            name, value,
             self._into_selection(selection1), self._into_selection(selection2),
             state
         )
@@ -436,7 +768,8 @@ class PyMOLObject:
         """
         Turn on an atom representation (e.g. sticks, spheres, etc.).
 
-        This is a thin wrapper around the *PyMOL* ``show()`` command.
+        This method is a thin wrapper around the *PyMOL* ``show()``
+        command.
 
         Parameters
         ----------
@@ -468,10 +801,11 @@ class PyMOLObject:
     @validate
     def show_as(self, representation, selection=None):
         """
-        Turn on a representation (e.g. sticks, spheres, etc.) and turn
-        off all other representations.
+        Turn on a representation (e.g. sticks, spheres, etc.) and hide
+        all other representations.
 
-        This is a thin wrapper around the *PyMOL* ``show_as()`` command.
+        This method is a thin wrapper around the *PyMOL* ``show_as()``
+        command.
 
         Parameters
         ----------
@@ -500,12 +834,147 @@ class PyMOLObject:
         """
         self._cmd.show(representation, self._into_selection(selection))
     
-    # TODO: def smooth()
+    @validate
+    def smooth(self, selection=None, passes=1, window=5,
+               first=1, last=0, ends=False):
+        """
+        Perform a moving average over the coordinate states.
+
+        This method is a thin wrapper around the *PyMOL* ``smooth()``
+        command.
+
+        Parameters
+        ----------
+        selection : str or ndarray, dtype=bool, optional
+            A boolean mask or a *PyMOL* selection expression that
+            selects the atoms of this *PyMOL* object to apply the
+            command on.
+            By default, the command is applied on all atoms of this
+            *PyMOL* object.
+        passes : int, optional
+            The number of smoothing passes.
+        windows : int, optional
+            The size of the moving window.
+        first, last : int, optional
+            The interval of states to smooth.
+        ends : bool, optional
+            If set to true, the end states are also smoothed using a
+            weighted asymmetric window.
+        """
+        self._cmd.smooth(
+            self._into_selection(selection), passes, window,
+            first, last, int(ends)
+        )
+    
     # TODO: def spectrum()
-    # TODO: def unset()
-    # TODO: def unset_bond()
-    # TODO: def valence()
-    # TODO: def zoom()
+    
+    @validate
+    def unset(self, name, selection=None, state=None):
+        """
+        Clear per-atom settings.
+
+        This method is a thin wrapper around the *PyMOL* ``set()``
+        command.
+
+        Parameters
+        ----------
+        name : str
+            The name of the setting to be cleared.
+            One of
+            - ``'sphere_color'``,
+            - ``'surface_color'``,
+            - ``'mesh_color'``,
+            - ``'label_color'``,
+            - ``'dot_color'``,
+            - ``'cartoon_color'``,
+            - ``'ribbon_color'``,
+            - ``'transparency'`` (for surfaces) or
+            - ``'sphere_transparency'``.
+        selection : str or ndarray, dtype=bool, optional
+            A boolean mask or a *PyMOL* selection expression that
+            selects the atoms of this *PyMOL* object to apply the
+            command on.
+            By default, the command is applied on all atoms of this
+            *PyMOL* object.
+        state : int, optional
+            The state to apply the command on.
+            By default, the command is applied on all states of this
+            *PyMOL* object.
+        """
+        state = 0 if state is None else state
+        self._cmd.unset(name, self._into_selection(selection), state)
+
+    @validate
+    def unset_bond(self, name, selection1=None, selection2=None, state=None):
+        """
+        Clear per-bond settings for all bonds which exist
+        between two atom selections.
+
+        This method is a thin wrapper around the *PyMOL* ``unset_bond()``
+        command.
+
+        Parameters
+        ----------
+        name : str
+            The name of the setting to be cleared.
+            One of
+            - ``'valence'``,
+            - ``'line_width'``,
+            - ``'line_color'``,
+            - ``'stick_radius'``,
+            - ``'stick_color'`` or
+            - ``'stick_transparency'.
+        selection1, selection2 : str or ndarray, dtype=bool, optional
+            A boolean mask or a *PyMOL* selection expression that
+            selects the atoms of this *PyMOL* object to apply the
+            command on.
+            By default, `selection1` applies to all atoms of this
+            *PyMOL* object and `selection2` applies to the same atoms as
+            `selection1`.
+        state : int, optional
+            The state to apply the command on.
+            By default, the command is applied on all states of this
+            *PyMOL* object.
+        """
+        state = 0 if state is None else state
+        selection2 = selection1 if selection2 is None else selection2
+        self._cmd.unset_bond(
+            name,
+            self._into_selection(selection1), self._into_selection(selection2),
+            state
+        )
+    
+    @validate
+    def zoom(self, selection=None, buffer=0.0, state=None, complete=False):
+        """
+        Scale and translate the window and the origin to cover the
+        selected atoms.
+
+        This method is a thin wrapper around the *PyMOL* ``zoom()``
+        command.
+
+        Parameters
+        ----------
+        selection : str or ndarray, dtype=bool, optional
+            A boolean mask or a *PyMOL* selection expression that
+            selects the atoms of this *PyMOL* object to apply the
+            command on.
+            By default, the command is applied on all atoms of this
+            *PyMOL* object.
+        buffer : float, optional
+            An additional distance to the calculated camera position.
+        state : int, optional
+            The state to apply the command on.
+            By default, the command is applied on all states of this
+            *PyMOL* object.
+        complete : bool, optional
+            If set to true, it is insured that no atoms centers are
+            clipped.
+        """
+        state = 0 if state is None else state
+        self._cmd.zoom(
+            self._into_selection(selection), buffer, state, int(complete)
+        )
 
 
 class NonexistentObjectError(Exception):
