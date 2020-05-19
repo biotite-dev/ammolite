@@ -133,6 +133,9 @@ class PyMOLObject:
         Convert this object into an :class:`AtomArray` or
         :class:`AtomArrayStack`.
 
+        The returned :class:`AtomArray` contains the optional annotation
+        categories ``b_factor``, ``occupancy`` and ``charge``.
+
         Parameters
         ----------
         state : int, optional
@@ -152,26 +155,21 @@ class PyMOLObject:
                   Note that this leads to duplicate atoms.
                   When this option is chosen, the ``altloc_id``
                   annotation array is added to the returned structure.
-        extra_fields : list of str, optional
-            The strings in the list are optional annotation categories
-            that should be stored in the output atom array (stack).
-            ``'b_factor'``, ``'occupancy'`` and``'charge'`` are valid
-            values.
         include_bonds : bool, optional
             If set to true, an associated :class:`BondList` will be created
-            for the returned atom array (stack).
+            for the returned structure.
         
         Returns
         -------
         structure : AtomArray or AtomArrayStack
             The converted structure.
-            Wheather an :class:`AtomArray` or :class:`AtomArrayStack` is
+            Whether an :class:`AtomArray` or :class:`AtomArrayStack` is
             returned depends on the `state` parameter.
         """
         if state is None:
             model = self._cmd.get_model(self._name, state=1)
             template = convert_to_atom_array(
-                model, altloc, extra_fields, include_bonds
+                model, include_bonds
             )
             expected_length = None
             coord = []
@@ -185,12 +183,35 @@ class PyMOLObject:
                     )
                 coord.append(state_coord)
             coord = np.stack(coord)
-            return struc.from_template(template, coord)
+            structure = struc.from_template(template, coord)
+        
         else:
             model = self._cmd.get_model(self._name, state=state)
-            return convert_to_atom_array(
-                model, altloc, extra_fields, include_bonds
+            structure = convert_to_atom_array(
+                model, include_bonds
             )
+        
+        # Filter altloc IDs and return
+        if altloc == "occupancy":
+            structure = structure[
+                ...,
+                struc.filter_highest_occupancy_altloc(
+                    structure, structure.altloc_id, structure.occupancy
+                )
+            ]
+            structure.del_annotation("altloc_id")
+            return structure
+        elif altloc == "first":
+            structure = structure[
+                ...,
+                filter_first_altloc(structure, structure.altloc_id)
+            ]
+            structure.del_annotation("altloc_id")
+            return structure
+        elif altloc == "all":
+            return structure
+        else:
+            raise ValueError(f"'{altloc}' is not a valid 'altloc' option")
 
 
     
@@ -214,7 +235,7 @@ class PyMOLObject:
     def where(self, mask):
         """
         Convert a boolean mask for atom selection into a *PyMOL*
-        selection string.
+        selection expression.
 
         Parameters
         ----------
@@ -223,8 +244,8 @@ class PyMOLObject:
         
         Returns
         -------
-        selection : str
-            A *PyMOL* compatible selection string.
+        expression : str
+            A *PyMOL* compatible selection expression.
         """
         if len(mask) != self._atom_count:
             raise IndexError(
@@ -261,13 +282,63 @@ class PyMOLObject:
         # Constrain the selection to given object name
         complete_selection = f"model {self._name} and ({index_selection})"
         return complete_selection
+    
+    def _into_selection(self, selection):
+        """
+        Turn a boolean mask into a *PyMOL* selection expression or 
+        restrict an selection expression to the current *PyMOL* object.
+        """
+        if selection is None:
+            return f"model {self._name}"
+        elif isinstance(selection, str):
+            return f"model {self._name} and ({selection})"
+        else:
+            return self.where(np.asarray(selection))
+
 
 
     # TODO: def alter()
     # TODO: def cartoon()
     # TODO: def center()
     # TODO: def clip()
-    # TODO: def color()
+    
+    @validate
+    def color(self, color, selection=None):
+        """
+        Change the color of atoms.
+
+        This is a thin wrapper around the *PyMOL* ``color()`` command.
+
+        Parameters
+        ----------
+        color : str or tuple(float, float, float)
+            Either a *PyMOL* color name or a tuple containing an RGB
+            value (0.0 to 1.0).
+        selection : str or ndarray, dtype=bool, optional
+            A boolean mask or a *PyMOL* selection expression that
+            selects the atoms of this *PyMOL* object to apply the
+            command on.
+            By default, the command is applied on all atoms of this
+            *PyMOL* object.
+        
+        Notes
+        -----
+        If an RGB color is given, the color is registered as a unique
+        named color via the ``set_color()`` command.
+        """
+        if not isinstance(color, str):
+            color_name = f"ammolite_color_{PyMOLObject._color_counter}"
+            PyMOLObject._color_counter += 1
+            self._cmd.set_color(color_name, tuple(color))
+        else:
+            color_name = color
+            registered = [name for name, _ in self._cmd.get_color_indices()]
+            if color_name not in registered:
+                raise ValueError(
+                    f"Unknown color '{color_name}'"
+                )
+        self._cmd.color(color_name, self._into_selection(selection))
+
     # TODO: def desaturate()
     # TODO: def disable()
     # TODO: def distance()
@@ -278,17 +349,163 @@ class PyMOLObject:
     # TODO: def orient()
     # TODO: def origin()
     # TODO: def select()
-    # TODO: def set()
-    # TODO: def set_bond()
-    # TODO: def show()
-    # TODO: def show_as()
+
+    @validate
+    def set(self, name, value, selection=None, state=None):
+        """
+        Change per-atom settings.
+
+        This is a thin wrapper around the *PyMOL* ``set()`` command.
+
+        Parameters
+        ----------
+        name : str
+            The name of the setting to be changed.
+            One of
+            - ``'sphere_color'``,
+            - ``'surface_color'``,
+            - ``'mesh_color'``,
+            - ``'label_color'``,
+            - ``'dot_color'``,
+            - ``'cartoon_color'``,
+            - ``'ribbon_color'``,
+            - ``'transparency'`` (for surfaces) or
+            - ``'sphere_transparency'``.
+        value : object
+            The new value for the given setting name.
+        selection : str or ndarray, dtype=bool, optional
+            A boolean mask or a *PyMOL* selection expression that
+            selects the atoms of this *PyMOL* object to apply the
+            command on.
+            By default, the command is applied on all atoms of this
+            *PyMOL* object.
+        state : int, optional
+            The state to apply the command on.
+            By default, the command is applied on all states of this
+            *PyMOL* object.
+        """
+        state = 0 if state is None else state
+        self._cmd.set(name, str(value), self._into_selection(selection), state)
+
+    @validate
+    def set_bond(self, value, selection1=None, selection2=None, state=None):
+        """
+        Change per-bond settings for all bonds which exist
+        between two atom selections.
+
+        This is a thin wrapper around the *PyMOL* ``set_bond()`` command.
+
+        Parameters
+        ----------
+        name : str
+            The name of the setting to be changed.
+            One of
+            - ``'sphere_color'``,
+            - ``'surface_color'``,
+            - ``'mesh_color'``,
+            - ``'label_color'``,
+            - ``'dot_color'``,
+            - ``'cartoon_color'``,
+            - ``'ribbon_color'``,
+            - ``'transparency'`` (for surfaces) or
+            - ``'sphere_transparency'``.
+        value : object
+            The new value for the given setting name.
+        selection1, selection2 : str or ndarray, dtype=bool, optional
+            A boolean mask or a *PyMOL* selection expression that
+            selects the atoms of this *PyMOL* object to apply the
+            command on.
+            By default, `selection1` applies to all atoms of this
+            *PyMOL* object and `selection2` applies to the same atoms as
+            `selection1`.
+        state : int, optional
+            The state to apply the command on.
+            By default, the command is applied on all states of this
+            *PyMOL* object.
+        """
+        state = 0 if state is None else state
+        selection2 = selection1 if selection2 is None else selection2
+        self._cmd.set_bond(
+            name, str(value),
+            self._into_selection(selection1), self._into_selection(selection2),
+            state
+        )
+    
+    @validate
+    def show(self, representation, selection=None):
+        """
+        Turn on an atom representation (e.g. sticks, spheres, etc.).
+
+        This is a thin wrapper around the *PyMOL* ``show()`` command.
+
+        Parameters
+        ----------
+        representation : str
+            One of
+            - ``'lines'``,
+            - ``'spheres'``,
+            - ``'mesh'``,
+            - ``'ribbon'``,
+            - ``'cartoon'``,
+            - ``'sticks'``,
+            - ``'dots'``,
+            - ``'surface'``,
+            - ``'label'``,
+            - ``'extent'``,
+            - ``'nonbonded'``,
+            - ``'nb_spheres'``,
+            - ``'slice'`` or
+            - ``'cell'``.
+        selection : str or ndarray, dtype=bool, optional
+            A boolean mask or a *PyMOL* selection expression that
+            selects the atoms of this *PyMOL* object to apply the
+            command on.
+            By default, the command is applied on all atoms of this
+            *PyMOL* object.
+        """
+        self._cmd.show(representation, self._into_selection(selection))
+
+    @validate
+    def show_as(self, representation, selection=None):
+        """
+        Turn on a representation (e.g. sticks, spheres, etc.) and turn
+        off all other representations.
+
+        This is a thin wrapper around the *PyMOL* ``show_as()`` command.
+
+        Parameters
+        ----------
+        representation : str
+            One of
+            - ``'lines'``,
+            - ``'spheres'``,
+            - ``'mesh'``,
+            - ``'ribbon'``,
+            - ``'cartoon'``,
+            - ``'sticks'``,
+            - ``'dots'``,
+            - ``'surface'``,
+            - ``'label'``,
+            - ``'extent'``,
+            - ``'nonbonded'``,
+            - ``'nb_spheres'``,
+            - ``'slice'`` or
+            - ``'cell'``.
+        selection : str or ndarray, dtype=bool, optional
+            A boolean mask or a *PyMOL* selection expression that
+            selects the atoms of this *PyMOL* object to apply the
+            command on.
+            By default, the command is applied on all atoms of this
+            *PyMOL* object.
+        """
+        self._cmd.show(representation, self._into_selection(selection))
+    
     # TODO: def smooth()
     # TODO: def spectrum()
     # TODO: def unset()
     # TODO: def unset_bond()
     # TODO: def valence()
     # TODO: def zoom()
-
 
 
 class NonexistentObjectError(Exception):

@@ -28,9 +28,7 @@ def test_select(random_seed):
     test_selection = pymol_object.where(ref_mask)
     # Set B factor of all masked atoms to 1
     cmd.alter(test_selection, "b=1.0")
-    test_b_factor = pymol_object.to_structure(
-        state=1, extra_fields=["b_factor"]
-    ).b_factor
+    test_b_factor = pymol_object.to_structure(state=1).b_factor
     # Get the mask from the occupancy back again
     test_mask = (test_b_factor == 1.0)
 

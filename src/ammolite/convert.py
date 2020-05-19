@@ -12,31 +12,20 @@ from chempy.models import Indexed as IndexedModel
 from chempy import Atom, Bond
 
 
-def convert_to_atom_array(chempy_model, altloc="all", extra_fields=None, 
-                          include_bonds=False):
+def convert_to_atom_array(chempy_model, include_bonds=False):
     """
     Convert a :class:`chempy.models.Indexed`
     object into an :class:`AtomArray`.
+
+    The returned :class:`AtomArray` contains the optional annotation
+    categories ``b_factor``, ``occupancy``, ``charge`` and
+    ``altloc_id``.
+    No *altloc* ID filtering is performed.
 
     Parameters
     ----------
     chempy_model : Indexed
         The ``chempy`` model.
-    altloc : {'first', 'occupancy', 'all'}
-        This parameter defines how *altloc* IDs are handled:
-            - ``'first'`` - Use atoms that have the first *altloc* ID
-              appearing in a residue.
-            - ``'occupancy'`` - Use atoms that have the *altloc* ID
-              with the highest occupancy for a residue.
-            - ``'all'`` - Use all atoms.
-              Note that this leads to duplicate atoms.
-              When this option is chosen, the ``altloc_id`` annotation
-              array is added to the returned structure.
-    extra_fields : list of str, optional
-        The strings in the list are optional annotation categories
-        that should be stored in the output atom array.
-        ``'b_factor'``, ``'occupancy'`` and``'charge'`` are valid
-        values.
     include_bonds : bool, optional
         If set to true, an associated :class:`BondList` will be created
         for the returned atom array.
@@ -46,10 +35,6 @@ def convert_to_atom_array(chempy_model, altloc="all", extra_fields=None,
     atom_array : AtomArray
         The converted structure.
     """
-    if extra_fields is None:
-        extra_fields = []
-    
-    
     atoms = chempy_model.atom
 
     bonds = chempy_model.bond
@@ -99,26 +84,36 @@ def convert_to_atom_array(chempy_model, altloc="all", extra_fields=None,
         dtype="U2"
     )
     
-    if altloc == "all":
-        atom_array.set_annotation(
-            "altloc_id",
-            np.array([a.alt for a in atoms], dtype="U1")
+    atom_array.set_annotation(
+        "b_factor",
+        np.array(
+            [a.b if hasattr(a, "b") else 0
+             for a in atoms],
+            dtype=float
         )
-    if "b_factor" in extra_fields:
-        atom_array.set_annotation(
-            "b_factor",
-            np.array([a.b for a in atoms], dtype=float)
+    )
+    atom_array.set_annotation(
+        "occupancy",
+        np.array(
+            [a.occupancy if hasattr(a, "occupancy") else 1.0 for a in atoms],
+            dtype=float
         )
-    if "occupancy" in extra_fields:
-        atom_array.set_annotation(
-            "occupancy",
-            np.array([a.occupancy for a in atoms], dtype=float)
+    )
+    atom_array.set_annotation(
+        "charge",
+        np.array(
+            [a.formal_charge if hasattr(a, "formal_charge") else 0
+             for a in atoms],
+            dtype=int
         )
-    if "charge" in extra_fields:
-        atom_array.set_annotation(
-            "charge",
-            np.array([a.formal_charge for a in atoms], dtype=int)
+    )
+    atom_array.set_annotation(
+        "altloc_id",
+        np.array(
+            [a.alt if hasattr(a, "alt") else "" for a in atoms],
+            dtype="U1"
         )
+    )
     
 
     # Set coordinates
@@ -137,20 +132,7 @@ def convert_to_atom_array(chempy_model, altloc="all", extra_fields=None,
         atom_array.bonds = struc.BondList(len(atoms), bond_array)
     
 
-    # Filter altloc IDs and return
-    if altloc == "occupancy":
-        return atom_array[
-            struc.filter_highest_occupancy_altloc(
-                atom_array, altloc_ids, occupancy.astype(float)
-            )
-        ]
-    # 'first' is also fallback if model has no occupancy information
-    elif altloc == "first":
-        return atom_array[filter_first_altloc(atom_array, altloc_ids)]
-    elif altloc == "all":
-        return atom_array
-    else:
-        raise ValueError(f"'{altloc}' is not a valid 'altloc' option")
+    return atom_array
 
 
 def convert_to_chempy_model(atom_array):
