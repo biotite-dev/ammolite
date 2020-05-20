@@ -1,13 +1,15 @@
 import numpy as np
 import matplotlib.colors as colors
+import biotite
 import biotite.structure as struc
 import biotite.structure.io.mmtf as mmtf
 import biotite.database.rcsb as rcsb
-from ammolite import launch_pymol, select, to_pymol
+import ammolite
 from pymol import cmd
 
 
-launch_pymol("-qixekF", "-W", "400", "-H", "400")
+#ammolite.launch_pymol("-qixekF")
+ammolite.launch_pymol("-qixkF", "-W", "400", "-H", "400")
 
 #----------------------------------------------------------------------#
 
@@ -32,34 +34,39 @@ mmtf_file = mmtf.MMTFFile.read(rcsb.fetch("1C75", "mmtf"))
 structure = mmtf.get_structure(mmtf_file, model=1, include_bonds=True)
 cyt_c = structure[structure.res_name != "HOH"]
 
-to_pymol("cyt_c", cyt_c)
+pymol_cyt_c = ammolite.PyMOLObject.from_structure(cyt_c)
 
 #----------------------------------------------------------------------#
 
 # Style protein
 protein_mask = struc.filter_amino_acids(cyt_c)
 
-cmd.show_as("cartoon", select("cyt_c", protein_mask))
-cmd.color("lightgreen", select("cyt_c", protein_mask & (cyt_c.element == "C")))
+pymol_cyt_c.show_as("cartoon", protein_mask)
+pymol_cyt_c.color("lightgreen", protein_mask & (cyt_c.element == "C"))
 
 #----------------------------------------------------------------------#
 
 # Style heme group
 heme_mask = (cyt_c.res_name == "HEM")
 
-cmd.show_as("sticks", select("cyt_c", heme_mask))
-cmd.color("lightorange", select("cyt_c", heme_mask & (cyt_c.element == "C")))
+pymol_cyt_c.show_as("sticks", heme_mask)
+pymol_cyt_c.color("lightorange", heme_mask & (cyt_c.element == "C"))
 
 #----------------------------------------------------------------------#
 
-# Mark histidine bound to heme as sticks
-heme_iron_mask = np.where(cyt_c.element == "FE")[0]
-heme_iron_coord = cyt_c[heme_iron_mask].coord[0]
+# Mark the histidine bound to heme as sticks
+heme_iron_coord = cyt_c[cyt_c.element == "FE"].coord[0]
 adjacency_mask = (struc.distance(cyt_c.coord, heme_iron_coord) < 2.0)
 bound_nitrogen_mask = adjacency_mask & (cyt_c.res_name == "HIS")
 his_mask = (cyt_c.res_id == cyt_c.res_id[bound_nitrogen_mask])
 
-cmd.show("sticks", select("cyt_c", his_mask))
-cmd.color("darkgreen", select(
-    "cyt_c", his_mask & (cyt_c.element == "C") & (cyt_c.atom_name != "CA")
-))
+pymol_cyt_c.show("sticks", his_mask)
+pymol_cyt_c.color(
+    "darkgreen",
+    his_mask & (cyt_c.element == "C") & (cyt_c.atom_name != "CA")
+)
+
+#----------------------------------------------------------------------#
+
+# Zoom into binding site
+pymol_cyt_c.zoom(heme_mask | his_mask, buffer=1.0)
