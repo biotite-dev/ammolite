@@ -133,7 +133,7 @@ class PyMOLObject:
 
         return PyMOLObject(name, pymol_instance, delete)
 
-    def to_structure(self, state=None, altloc="all", extra_fields=None,
+    def to_structure(self, state=None, altloc="first", extra_fields=None,
                      include_bonds=False):
         """
         Convert this object into an :class:`AtomArray` or
@@ -748,7 +748,7 @@ class PyMOLObject:
             - ``'line_color'``,
             - ``'stick_radius'``,
             - ``'stick_color'`` or
-            - ``'stick_transparency'.
+            - ``'stick_transparency'``.
         value : object
             The new value for the given setting name.
         selection1, selection2 : str or ndarray, dtype=bool, optional
@@ -931,7 +931,7 @@ class PyMOLObject:
             - ``'line_color'``,
             - ``'stick_radius'``,
             - ``'stick_color'`` or
-            - ``'stick_transparency'.
+            - ``'stick_transparency'``.
         selection1, selection2 : str or ndarray, dtype=bool, optional
             A boolean mask or a *PyMOL* selection expression that
             selects the atoms of this *PyMOL* object to apply the
@@ -987,15 +987,13 @@ class PyMOLObject:
 
 class NonexistentObjectError(Exception):
     """
-    This exception is raised, if a *PyMOL* object with a given name
-    does not exist.
+    Indicates that a *PyMOL* object with a given name does not exist.
     """
     pass
 
 class ModifiedObjectError(Exception):
     """
-    This exception is raised, if a atoms were added to or removed from
-    the *PyMOL* object after the corresponding :class:`PyMOLObject`
-    was created.
+    Indicates that a atoms were added to or removed from the *PyMOL*
+    object after the corresponding :class:`PyMOLObject` was created.
     """
     pass
