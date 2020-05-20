@@ -6,7 +6,7 @@
 Transfer structure data from Biotite to PyMOL.
 """
 
-__version__ = "0.1.1"
+__version__ = "0.2.0"
 __name__ = "ammolite"
 __author__ = "Patrick Kunzmann"
 
