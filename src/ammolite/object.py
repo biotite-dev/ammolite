@@ -133,7 +133,7 @@ class PyMOLObject:
 
         return PyMOLObject(name, pymol_instance, delete)
 
-    def to_structure(self, state=None, altloc="first", extra_fields=None,
+    def to_structure(self, state=None, altloc="all", extra_fields=None,
                      include_bonds=False):
         """
         Convert this object into an :class:`AtomArray` or
@@ -152,6 +152,7 @@ class PyMOLObject:
             containing all states will be returned, even if the *PyMOL*
             object contains only one state.
         altloc : {'first', 'occupancy', 'all'}
+            This parameter is not implemted yet!
             This parameter defines how *altloc* IDs are handled:
                 - ``'first'`` - Use atoms that have the first
                   *altloc* ID appearing in a residue.
@@ -199,6 +200,7 @@ class PyMOLObject:
         
         # Filter altloc IDs and return
         if altloc == "occupancy":
+            raise NotImplementedError()
             structure = structure[
                 ...,
                 struc.filter_highest_occupancy_altloc(
@@ -208,9 +210,10 @@ class PyMOLObject:
             structure.del_annotation("altloc_id")
             return structure
         elif altloc == "first":
+            raise NotImplementedError()
             structure = structure[
                 ...,
-                filter_first_altloc(structure, structure.altloc_id)
+                struc.filter_first_altloc(structure, structure.altloc_id)
             ]
             structure.del_annotation("altloc_id")
             return structure
@@ -227,6 +230,15 @@ class PyMOLObject:
     
 
     def exists(self):
+        """
+        Check whether the underlying *PyMOL* object still exists.
+
+        Returns
+        -------
+        bool
+            True if the *PyMOL* session contains an object with the name
+            of this :class:`PyMOLObject`, false otherwise.
+        """
         return self._name in self._cmd.get_object_list()
 
     def _check_existence(self):
