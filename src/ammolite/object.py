@@ -255,8 +255,8 @@ class PyMOLObject:
 
         # Indices where the mask changes from True to False
         # or from False to True
-        # The '+1' makes each index refer to the position after the change
-        # i.e. the new value
+        # The '+1' makes each index refer to the position
+        # after the change i.e. the new value
         changes = np.where(np.diff(mask))[0] + 1
         # If first element is True, insert index 0 at start
         # -> the first change is always from False to True
@@ -268,20 +268,22 @@ class PyMOLObject:
         if mask[-1]:
             changes = np.concatenate((changes, [len(mask)]))
         # -> Changes are alternating (F->T, T->F, F->T, ..., F->T, T->F)
-        # Reshape into pairs of changes ([F->T, T->F], [F->T, T->F], ...)
+        # Reshape into pairs ([F->T, T->F], [F->T, T->F], ...)
         # -> these are the intervals where the mask is True
         intervals = np.reshape(changes, (-1, 2))
 
-        # Convert interval into selection string
-        # Two things to note:
-        # - PyMOLs indexing starts at 1-> 'start+1'
-        # - Stop index in 'intervals' is exclusive -> 'stop+1-1' -> 'stop'
-        index_selection = " or ".join(
-            [f"index {start+1}-{stop}" for start, stop in intervals]
-        )
-        # Constrain the selection to given object name
-        complete_selection = f"model {self._name} and ({index_selection})"
-        return complete_selection
+        if len(intervals) > 0:
+            # Convert interval into selection string
+            # Two things to note:
+            # - PyMOLs indexing starts at 1-> 'start+1'
+            # - Stop in 'intervals' is exclusive -> 'stop+1-1' -> 'stop'
+            index_selection = " or ".join(
+                [f"index {start+1}-{stop}" for start, stop in intervals]
+            )
+            # Constrain the selection to given object name
+            return f"model {self._name} and ({index_selection})"
+        else:
+            return f"model {self._name}"
     
     def _into_selection(self, selection):
         """
@@ -466,7 +468,7 @@ class PyMOLObject:
             A desaturation factor between 0.0 and 1.0.
         """
         self._cmd.desaturate(self._into_selection(selection), a)
-    
+
     @validate
     def disable(self, selection=None):
         """
