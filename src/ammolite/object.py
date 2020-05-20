@@ -283,7 +283,7 @@ class PyMOLObject:
             # Constrain the selection to given object name
             return f"model {self._name} and ({index_selection})"
         else:
-            return f"model {self._name}"
+            return "none"
     
     def _into_selection(self, selection):
         """
