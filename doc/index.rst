@@ -181,7 +181,7 @@ object back into an :class:`AtomArray` or :class:`AtomArrayStack`.
 
 .. code-block:: python
 
-  # To PyMOL...
+  # From Biotite to PyMOL...
   pymol_object = ammolite.PyMOLObject.from_structure(atom_array)
   # ...and back again
   second_atom_array = pymol_object.to_structure()
