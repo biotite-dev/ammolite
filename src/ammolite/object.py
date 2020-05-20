@@ -10,6 +10,11 @@ from .convert import convert_to_atom_array, convert_to_chempy_model
 
 
 def validate(method):
+    """
+    Check if the object name still exists and if the atom count has
+    been modified.
+    If this is the case, raise the appropriate exception.
+    """
     @wraps(method)
     def wrapper(self, *args, **kwargs):
         self._check_existence()
@@ -96,11 +101,12 @@ class PyMOLObject:
             The name of the newly created *PyMOL* object.
             If omitted, a unique name is generated.
         pymol_instance : PyMOL, optional
-            When using the object-oriented *PyMOL* API the :class:`PyMOL`
-            object must be given here.
+            When using the object-oriented *PyMOL* API the
+            :class:`PyMOL` object must be given here.
         delete : PyMOL, optional
-            If set to true, the underlying *PyMOL* object will be removed
-            from the *PyMOL* session, when this object is garbage collected.
+            If set to true, the underlying *PyMOL* object will be
+            removed from the *PyMOL* session, when this object is
+            garbage collected.
         """
         if pymol_instance is None:
             cmd = default_cmd
@@ -980,7 +986,16 @@ class PyMOLObject:
 
 
 class NonexistentObjectError(Exception):
+    """
+    This exception is raised, if a *PyMOL* object with a given name
+    does not exist.
+    """
     pass
 
 class ModifiedObjectError(Exception):
+    """
+    This exception is raised, if a atoms were added to or removed from
+    the *PyMOL* object after the corresponding :class:`PyMOLObject`
+    was created.
+    """
     pass
