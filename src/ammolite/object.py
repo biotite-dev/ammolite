@@ -154,14 +154,16 @@ class PyMOLObject:
         altloc : {'first', 'occupancy', 'all'}
             This parameter is not implemted yet!
             This parameter defines how *altloc* IDs are handled:
-                - ``'first'`` - Use atoms that have the first
-                  *altloc* ID appearing in a residue.
-                - ``'occupancy'`` - Use atoms that have the *altloc* ID
-                  with the highest occupancy for a residue.
-                - ``'all'`` - Use all atoms.
-                  Note that this leads to duplicate atoms.
-                  When this option is chosen, the ``altloc_id``
-                  annotation array is added to the returned structure.
+            
+            - ``'first'`` - Use atoms that have the first
+              *altloc* ID appearing in a residue.
+            - ``'occupancy'`` - Use atoms that have the *altloc* ID
+              with the highest occupancy for a residue.
+            - ``'all'`` - Use all atoms.
+              Note that this leads to duplicate atoms.
+              When this option is chosen, the ``altloc_id``
+              annotation array is added to the returned structure.
+            
         include_bonds : bool, optional
             If set to true, an associated :class:`BondList` will be created
             for the returned structure.
