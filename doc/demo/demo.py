@@ -8,8 +8,7 @@ import ammolite
 from pymol import cmd
 
 
-#ammolite.launch_pymol("-qixekF")
-ammolite.launch_pymol("-qixkF", "-W", "400", "-H", "400")
+ammolite.launch_pymol("-qixekF")
 
 #----------------------------------------------------------------------#
 
