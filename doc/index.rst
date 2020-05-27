@@ -5,7 +5,7 @@
 |
 
 Ammolite - From Biotite to PyMOL and back again
-====================================================
+===============================================
 
 This package enables the transfer of structure related objects
 from `Biotite <https://www.biotite-python.org/>`_
@@ -45,8 +45,8 @@ Installation
 However, *PyMOL* (at least version 2.0) must also be installed and needs to be
 importable by your Python interpreter:
 
-Installation via Conda
-^^^^^^^^^^^^^^^^^^^^^^
+PyMOL installation via Conda
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The simplest and recommended way to install *PyMOL* in combination with
 *Ammolite* is via the *Conda* package manager.
@@ -63,8 +63,8 @@ or the free and open-source variant with
 Note that the open-source build is maintained by an individual, so it might
 contain bugs or could not work at all for your system.
 
-Installation from pymol.org
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PyMOL installation from pymol.org
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Otherwise, if you have downloaded the *PyMOL* binary from
 `<https://pymol.org/>`_, add the install location the ``$PYTHONPATH`` path
