@@ -1,30 +1,29 @@
 import numpy as np
-import matplotlib.colors as colors
+from matplotlib.colors import to_rgb
 import biotite
 import biotite.structure as struc
 import biotite.structure.io.mmtf as mmtf
 import biotite.database.rcsb as rcsb
 import ammolite
-from pymol import cmd
 
 
-ammolite.launch_pymol("-qixekF")
+pymol = ammolite.launch_interactive_pymol("-qixekF")
 
 #----------------------------------------------------------------------#
 
 # General configuration
-cmd.bg_color("white")
-cmd.set("cartoon_side_chain_helper", 1)
-cmd.set("cartoon_oval_length", 0.8)
-cmd.set("depth_cue", 0)
-cmd.set("valence", 0)
+ammolite.cmd.bg_color("white")
+ammolite.cmd.set("cartoon_side_chain_helper", 1)
+ammolite.cmd.set("cartoon_oval_length", 0.8)
+ammolite.cmd.set("depth_cue", 0)
+ammolite.cmd.set("valence", 0)
 
 #----------------------------------------------------------------------#
 
 # Define colors used later
-cmd.set_color("lightorange",  colors.to_rgb(biotite.colors["lightorange"]))
-cmd.set_color("lightgreen",   colors.to_rgb(biotite.colors["lightgreen" ]))
-cmd.set_color("darkgreen",    colors.to_rgb(biotite.colors["darkgreen"  ]))
+ammolite.cmd.set_color("lightorange", to_rgb(biotite.colors["lightorange"]))
+ammolite.cmd.set_color("lightgreen",  to_rgb(biotite.colors["lightgreen" ]))
+ammolite.cmd.set_color("darkgreen",   to_rgb(biotite.colors["darkgreen"  ]))
 
 #----------------------------------------------------------------------#
 
