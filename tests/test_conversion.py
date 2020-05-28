@@ -11,20 +11,21 @@ from .util import data_dir, launch_pymol_for_test
 
 
 @pytest.mark.parametrize(
-    "path, state",
+    "path, altloc, state",
     itertools.product(
         glob.glob(join(data_dir, "*.cif")),
+        ["first", "occupancy", "all"],
         # AtomArray or AtomArrayStack
         [1, None]
     )
 )
-def test_to_biotite(path, state):
+def test_to_biotite(path, altloc, state):
     pdbx_file = pdbx.PDBxFile.read(path)
-    ref_array = pdbx.get_structure(pdbx_file, model=state, altloc="all")
+    ref_array = pdbx.get_structure(pdbx_file, model=state, altloc=altloc)
     
     launch_pymol_for_test()
     cmd.load(path, "test")
-    test_array = PyMOLObject("test").to_structure(state=state)
+    test_array = PyMOLObject("test").to_structure(state=state, altloc=altloc)
 
     for cat in [
         c for c in ref_array.get_annotation_categories() if c != "altloc_id"

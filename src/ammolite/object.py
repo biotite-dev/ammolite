@@ -153,7 +153,7 @@ class PyMOLObject:
 
         return PyMOLObject(name, pymol_instance, delete)
 
-    def to_structure(self, state=None, altloc="all", extra_fields=None,
+    def to_structure(self, state=None, altloc="first", extra_fields=None,
                      include_bonds=False):
         """
         Convert this object into an :class:`AtomArray` or
@@ -172,7 +172,6 @@ class PyMOLObject:
             containing all states will be returned, even if the *PyMOL*
             object contains only one state.
         altloc : {'first', 'occupancy', 'all'}
-            This parameter is not implemted yet!
             This parameter defines how *altloc* IDs are handled:
             
             - ``'first'`` - Use atoms that have the first
@@ -222,7 +221,6 @@ class PyMOLObject:
         
         # Filter altloc IDs and return
         if altloc == "occupancy":
-            raise NotImplementedError()
             structure = structure[
                 ...,
                 struc.filter_highest_occupancy_altloc(
@@ -232,7 +230,6 @@ class PyMOLObject:
             structure.del_annotation("altloc_id")
             return structure
         elif altloc == "first":
-            raise NotImplementedError()
             structure = structure[
                 ...,
                 struc.filter_first_altloc(structure, structure.altloc_id)

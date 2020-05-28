@@ -27,7 +27,7 @@ def is_launched():
 
 def launch_pymol():
     """
-    Launch *PyMOL* in object-oriented (library) mode.
+    Launch *PyMOL* in object-oriented library mode.
 
     This is the recommended way to launch *PyMOL* if no GUI is
     required.
