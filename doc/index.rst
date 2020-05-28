@@ -1,7 +1,5 @@
 .. include:: logo.rst
 
-.. _main_page:
-
 Ammolite - From Biotite to PyMOL and back again
 ===============================================
 
@@ -20,6 +18,7 @@ via *PyMOL*'s Python API:
 |
 
 .. image:: demo/demo.gif
+  :target: _images/demo.gif
 
 |
 
@@ -129,7 +128,7 @@ started in library mode.
 GUI mode
 """"""""
 
-When the *PyMOL* GUI is necessary, the object-oriented *PyMOL* API is not
+When the *PyMOL* GUI is necessary, the *PyMOL* library mode is not
 available.
 Instead *PyMOL* can be launched in interactive (GUI) mode:
 
