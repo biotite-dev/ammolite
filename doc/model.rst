@@ -1,3 +1,5 @@
+.. include:: logo.rst
+
 PyMOLObject API
 ---------------
 

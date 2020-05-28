@@ -1,8 +1,6 @@
-.. image:: static/assets/ammolite_logo.svg
-  :height: 200px
-  :align: center
+.. include:: logo.rst
 
-|
+.. _main_page:
 
 Ammolite - From Biotite to PyMOL and back again
 ===============================================
@@ -97,62 +95,52 @@ interpreter in interactive mode and typing
 
 If no error shows up, the installation is correct.
 
+|
 
 Usage
 -----
 
 .. currentmodule:: ammolite
 
+
 Launching PyMOL
 ^^^^^^^^^^^^^^^
 
+Library mode
+""""""""""""
+
 The recommended way to invoke *PyMOL* in a Python script depends on whether a
 GUI should be displayed.
-If no GUI is required, we recommend using object-oriented *PyMOL*.
+If no GUI is required, we recommend launching a *PyMOL* session in library
+mode.
 
 .. code-block:: python
 
-  from pymol2 import PyMOL
   import ammolite
 
-  pymol_app = PyMOL()
-  pymol_app.start()
-  ammolite.setup_parameters(pymol_instance=pymol_app)
-  cmd = pymol_app.cmd
-  
-  # The molecule visualization stuff goes here
+  ammolite.launch_pymol()
 
-  pymol_app.stop()
+Usually launching *PyMOL* manually via :func:`launch_pymol()` is not even
+necessary:
+When *Ammolite* requires a *PyMOL* session, e.g. for creating a *PyMOL* object
+or invoking a command, and none is already running, *PyMOL* is automatically
+started in library mode.
 
-The line with ``pymol_app.start()`` is essential here:
-Without this statement the following commands to *PyMOL* might lead to
-crashes.
-:func:`setup_parameters()` sets *PyMOL* parameters that are necessary for
-*Ammolite* to interact properly with *PyMOL*.
-
-.. autofunction:: setup_parameters
-
-For further demonstrations, on how to use object-oriented *PyMOL* with
-interactive Python in combination with *Ammolite*, have a look at
-the `example Jupyter notebooks <https://github.com/biotite-dev/ammolite/tree/master/doc/examples>`_.
-
-|
+GUI mode
+""""""""
 
 When the *PyMOL* GUI is necessary, the object-oriented *PyMOL* API is not
 available.
-Instead *PyMOL* can be launched in the following way:
+Instead *PyMOL* can be launched in interactive (GUI) mode:
 
 .. code-block:: python
 
-  from pymol import cmd
   import ammolite
 
-  ammolite.launch_pymol("-qixkF", "-W", "400", "-H", "400")
+  ammolite.launch_interactive_pymol("-qixkF", "-W", "400", "-H", "400")
 
-  # The molecule visualization stuff goes here
-
-:func:`launch_pymol()` starts *PyMOL* using the given command line options,
-reinitializes it and sets necessary parameters.
+:func:`launch_interactive_pymol()` starts *PyMOL* using the given command
+line options, reinitializes it and sets necessary parameters.
 
 After that, the usual *PyMOL* commands and the other functions from
 *Ammolite* are available.
@@ -164,14 +152,43 @@ termination might be necessary.
 This can be solved by using *PyMOL*'s integrated command line for executing
 Python.
 
-Transfer objects from Biotite to PyMOL and vice versa
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Launching PyMOL directly
+""""""""""""""""""""""""
 
-After *PyMOL* initialization, a *Biotite* :class:`AtomArray` or
-:class:`AtomArrayStack` can be converted to *PyMOL* objects via
-:meth:`PyMOLObject.from_structure()`.
-It is important to set the ``pymol_instance`` parameter if object-oriented
-*PyMOL* is used.
+.. note::
+  
+  This is not the recommended way to use *Ammolite*.
+  Usage is at your own risk. 
+
+You can also *PyMOL* directly using the *PyMOL* Python API, that
+:func:`launch_pymol()` and :func:`launch_interactive_pymol()` use internally.
+In this case, it is important to call :func:`setup_parameters()` for setting
+parameters that are necessary for *Ammolite* to interact properly with *PyMOL*.
+Furthermore, the ``pymol_instance`` parameter must be set the first time
+a :class:`PyMOLObject` is created to inform *Ammolite* about the *PyMOL*
+session.
+
+.. code-block:: python
+
+  from pymol2 import PyMOL
+  import ammolite
+
+  pymol_app = PyMOL()
+  pymol_app.start()
+  ammolite.setup_parameters(pymol_instance=pymol_app)
+  cmd = pymol_app.cmd
+  
+  pymol_object = ammolite.PyMOLObject.from_structure(
+      atom_array, pymol_instance=pymol_app
+  )
+
+|
+
+Transferring structures from Biotite to PyMOL and vice versa
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+A *Biotite* :class:`AtomArray` or :class:`AtomArrayStack` can be converted into
+a *PyMOL* object via :meth:`PyMOLObject.from_structure()`.
 This static method returns a :class:`PyMOLObject` - a wrapper around a
 *PyMOL* object (alias *PyMOL* model).
 This wrapper becomes invalid when atoms are added to or are deleted from the
@@ -204,6 +221,8 @@ command.
 :meth:`to_structure()` obtains the model via the :func:`get_model()` command
 and converts it into an :class:`AtomArray` via :func:`convert_to_atom_array`.
 
+|
+
 Atom selections
 ^^^^^^^^^^^^^^^
 
@@ -217,10 +236,19 @@ These boolean masks can be converted into selection expressions via the
   pymol_object = ammolite.PyMOLObject.from_structure(atom_array)
   ca_selection = pymol_object.where(atom_array.atom_name == "CA")
 
-Executing commands
-^^^^^^^^^^^^^^^^^^
+|
 
-*PyMOL* commands can be called as usual.
+Invoking commands
+^^^^^^^^^^^^^^^^^
+
+*PyMOL* commands can be called as usual:
+The current *PyMOL* session is obtained via ``ammolite.pymol`` and commands
+can be invoked using ``ammolite.cmd``.
+
+.. code-block:: python
+  
+  ammolite.cmd.set("sphere_scale", 1.5)
+
 But additionally, boolean masks can be used instead of *PyMOL*'s selection
 expressions via the :meth:`PyMOLObject.where()` method.
 
@@ -228,9 +256,9 @@ expressions via the :meth:`PyMOLObject.where()` method.
   
   pymol_object = ammolite.PyMOLObject.from_structure(atom_array)
   # Instead of this...
-  cmd.show_as("sticks", "resi 42")
+  ammolite.cmd.show_as("sticks", "resi 42")
   # ...this can also be used
-  cmd.show_as("sticks", pymol_object.where(atom_array.res_id == 42))
+  ammolite.cmd.show_as("sticks", pymol_object.where(atom_array.res_id == 42))
 
 To add syntactic sugar, common commands are available as :class:`PyMOLObject`
 methods.
@@ -271,12 +299,15 @@ The following commands are supported as instance methods:
 - :meth:`PyMOLObject.unset_bond()`
 - :meth:`PyMOLObject.zoom()`
 
+|
+
 Jupyter notebook support
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 *Jupyter* notebooks can directly display images rendered by *PyMOL* via
 :func:`show()` (not to be confused with :meth:`PyMOLObject.show()`).
 
+|
 
 Examples
 --------
@@ -284,16 +315,14 @@ Examples
 `A few examples are provided as Jupyter notebooks. <https://github.com/biotite-dev/ammolite/tree/master/doc/examples>`_
 
 |
-|
-|
 
 API Reference
 -------------
 
 .. toctree::
-   :maxdepth: 2
+  :maxdepth: 2
 
-   api/startup
-   api/model
-   api/convert
-   api/display
+  startup
+  model
+  convert
+  display

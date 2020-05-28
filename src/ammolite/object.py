@@ -374,6 +374,7 @@ class PyMOLObject:
         ----------
         type : str
             One of
+            
             - ``'automatic'``,
             - ``'skip'``,
             - ``'loop'``,
@@ -382,6 +383,7 @@ class PyMOLObject:
             - ``'tube'``,
             - ``'arrow'`` or
             - ``'dumbbell'``.
+        
         selection : str or ndarray, dtype=bool, optional
             A boolean mask or a *PyMOL* selection expression that
             selects the atoms of this *PyMOL* object to apply the
@@ -429,11 +431,13 @@ class PyMOLObject:
         Parameters
         ----------
         mode : {'near', 'far', 'move', 'slab', 'atoms'}
+            
             - ``near`` - Move the near plane
             - ``far`` - Move the far plane
             - ``move`` - Move slab
             - ``slab`` - Set slab thickness
             - ``atoms`` - clip selected atoms with the given buffer
+
         distance : float
             The meaning of this parameter depends on `mode`.
         selection : str or ndarray, dtype=bool, optional
@@ -547,12 +551,13 @@ class PyMOLObject:
         cutoff : float
             The longest distance to show.
         mode: {0, 1, 2, 3, 4}
-        - ``0`` - All interatomic distances
-        - ``1`` - Only bond distances
-        - ``2`` - Only polar contact distances
-        - ``3`` - All interatomic distances,
-          use distance_exclusion setting
-        - ``4`` - Distance between centroids
+            
+            - ``0`` - All interatomic distances
+            - ``1`` - Only bond distances
+            - ``2`` - Only polar contact distances
+            - ``3`` - All interatomic distances,
+              use distance_exclusion setting
+            - ``4`` - Distance between centroids
         """
         self._cmd.distance(self._into_selection(selection1))
     
@@ -611,6 +616,7 @@ class PyMOLObject:
         ----------
         representation : str
             One of
+            
             - ``'lines'``,
             - ``'spheres'``,
             - ``'mesh'``,
@@ -625,6 +631,7 @@ class PyMOLObject:
             - ``'nb_spheres'``,
             - ``'slice'`` or
             - ``'cell'``.
+
         selection : str or ndarray, dtype=bool, optional
             A boolean mask or a *PyMOL* selection expression that
             selects the atoms of this *PyMOL* object to apply the
@@ -738,6 +745,7 @@ class PyMOLObject:
         name : str
             The name of the setting to be changed.
             One of
+
             - ``'sphere_color'``,
             - ``'surface_color'``,
             - ``'mesh_color'``,
@@ -747,6 +755,7 @@ class PyMOLObject:
             - ``'ribbon_color'``,
             - ``'transparency'`` (for surfaces) or
             - ``'sphere_transparency'``.
+
         value : object
             The new value for the given setting name.
         selection : str or ndarray, dtype=bool, optional
@@ -777,12 +786,14 @@ class PyMOLObject:
         name : str
             The name of the setting to be changed.
             One of
+
             - ``'valence'``,
             - ``'line_width'``,
             - ``'line_color'``,
             - ``'stick_radius'``,
             - ``'stick_color'`` or
             - ``'stick_transparency'``.
+
         value : object
             The new value for the given setting name.
         selection1, selection2 : str or ndarray, dtype=bool, optional
@@ -817,6 +828,7 @@ class PyMOLObject:
         ----------
         representation : str
             One of
+
             - ``'lines'``,
             - ``'spheres'``,
             - ``'mesh'``,
@@ -831,6 +843,7 @@ class PyMOLObject:
             - ``'nb_spheres'``,
             - ``'slice'`` or
             - ``'cell'``.
+
         selection : str or ndarray, dtype=bool, optional
             A boolean mask or a *PyMOL* selection expression that
             selects the atoms of this *PyMOL* object to apply the
@@ -853,6 +866,7 @@ class PyMOLObject:
         ----------
         representation : str
             One of
+
             - ``'lines'``,
             - ``'spheres'``,
             - ``'mesh'``,
@@ -867,6 +881,7 @@ class PyMOLObject:
             - ``'nb_spheres'``,
             - ``'slice'`` or
             - ``'cell'``.
+
         selection : str or ndarray, dtype=bool, optional
             A boolean mask or a *PyMOL* selection expression that
             selects the atoms of this *PyMOL* object to apply the
@@ -923,6 +938,7 @@ class PyMOLObject:
         name : str
             The name of the setting to be cleared.
             One of
+
             - ``'sphere_color'``,
             - ``'surface_color'``,
             - ``'mesh_color'``,
@@ -932,6 +948,7 @@ class PyMOLObject:
             - ``'ribbon_color'``,
             - ``'transparency'`` (for surfaces) or
             - ``'sphere_transparency'``.
+
         selection : str or ndarray, dtype=bool, optional
             A boolean mask or a *PyMOL* selection expression that
             selects the atoms of this *PyMOL* object to apply the
@@ -960,12 +977,14 @@ class PyMOLObject:
         name : str
             The name of the setting to be cleared.
             One of
+
             - ``'valence'``,
             - ``'line_width'``,
             - ``'line_color'``,
             - ``'stick_radius'``,
             - ``'stick_color'`` or
             - ``'stick_transparency'``.
+
         selection1, selection2 : str or ndarray, dtype=bool, optional
             A boolean mask or a *PyMOL* selection expression that
             selects the atoms of this *PyMOL* object to apply the

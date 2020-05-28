@@ -1,3 +1,5 @@
+.. include:: logo.rst
+
 Jupyter notebook display API
 ----------------------------
 
