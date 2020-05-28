@@ -7,6 +7,7 @@ import numpy as np
 import biotite.structure as struc
 from pymol import cmd as default_cmd
 from .convert import convert_to_atom_array, convert_to_chempy_model
+from .startup import launch_pymol, _get_pymol, _set_pymol
 
 
 def validate(method):
@@ -53,9 +54,15 @@ class PyMOLObject:
     ----------
     name : str
         The name of the *PyMOL* object.
-    pymol_instance : PyMOL, optional
-        When using the object-oriented *PyMOL* API the :class:`PyMOL`
-        object must be given here.
+    pymol_instance : module or SingletonPyMOL or PyMOL, optional
+        If *PyMOL* is used in library mode, the :class:`PyMOL`
+        or :class:`SingletonPyMOL` object is given here.
+        If otherwise *PyMOL* is used in GUI mode, the :mod:`pymol`
+        module is given.
+        By default the currently used *PyMOL* instance
+        (``ammolite.pymol``) is used.
+        If no *PyMOL* instance is currently running,
+        *PyMOL* is started in library mode.
     delete : PyMOL, optional
         If set to true, the underlying *PyMOL* object will be removed
         from the *PyMOL* session,
@@ -72,13 +79,17 @@ class PyMOLObject:
     
 
     def __init__(self, name, pymol_instance=None, delete=True):
+        if pymol_instance is None:
+            pymol_instance = _get_pymol()
+            if pymol_instance is None:
+                # No PyMOL session has been started yet
+                pymol_instance = launch_pymol()
+                _set_pymol(pymol_instance)
+        
         self._name = name
         self._pymol = pymol_instance
         self.delete = delete
-        if pymol_instance is None:
-            self._cmd = default_cmd
-        else:
-            self._cmd = pymol_instance.cmd
+        self._cmd = pymol_instance.cmd
         self._check_existence()
         self._atom_count = self._cmd.count_atoms(f"model {self._name}")
 
@@ -100,19 +111,28 @@ class PyMOLObject:
         name : str, optional
             The name of the newly created *PyMOL* object.
             If omitted, a unique name is generated.
-        pymol_instance : PyMOL, optional
-            When using the object-oriented *PyMOL* API the
-            :class:`PyMOL` object must be given here.
+        pymol_instance : module or SingletonPyMOL or PyMOL, optional
+            If *PyMOL* is used in library mode, the :class:`PyMOL`
+            or :class:`SingletonPyMOL` object is given here.
+            If otherwise *PyMOL* is used in GUI mode, the :mod:`pymol`
+            module is given.
+            By default the currently used *PyMOL* instance
+            (``ammolite.pymol``) is used.
+            If no *PyMOL* instance is currently running,
+        *PyMOL* is started in library mode.
         delete : PyMOL, optional
             If set to true, the underlying *PyMOL* object will be
             removed from the *PyMOL* session, when this object is
             garbage collected.
         """
         if pymol_instance is None:
-            cmd = default_cmd
-        else:
-            cmd = pymol_instance.cmd
-        
+            pymol_instance = _get_pymol()
+            if pymol_instance is None:
+                # No PyMOL session has been started yet
+                pymol_instance = launch_pymol()
+                _set_pymol(pymol_instance)
+        cmd = pymol_instance.cmd
+
         if name is None:
             name = f"ammolite_obj_{PyMOLObject._object_counter}"
             PyMOLObject._object_counter += 1

@@ -6,8 +6,7 @@ import tempfile
 import time
 import datetime
 from os.path import join, getsize
-import pymol
-from pymol import cmd as default_cmd
+from .startup import launch_pymol, _get_pymol, _set_pymol
 
 
 INTERVAL = 0.1
@@ -30,9 +29,15 @@ def show(size=None, use_ray=False, timeout=60.0, pymol_instance=None):
         This will also increase the rendering time.
     timeout : float
         The number of seconds to wait for image output from *PyMOL*. 
-    pymol_instance : PyMOL, optional
-        When using the object-oriented *PyMOL* API the :class:`PyMOL`
-        object must be given here.
+    pymol_instance : module or SingletonPyMOL or PyMOL, optional
+        If *PyMOL* is used in library mode, the :class:`PyMOL`
+        or :class:`SingletonPyMOL` object is given here.
+        If otherwise *PyMOL* is used in GUI mode, the :mod:`pymol`
+        module is given.
+        By default the currently used *PyMOL* instance
+        (``ammolite.pymol``) is used.
+        If no *PyMOL* instance is currently running,
+        *PyMOL* is started in library mode.
     
     Raises
     ------
@@ -45,9 +50,12 @@ def show(size=None, use_ray=False, timeout=60.0, pymol_instance=None):
         raise ImportError("IPython is not installed")
 
     if pymol_instance is None:
-        cmd = default_cmd
-    else:
-        cmd = pymol_instance.cmd
+        pymol_instance = _get_pymol()
+        if pymol_instance is None:
+            # No PyMOL session has been started yet
+            pymol_instance = launch_pymol()
+            _set_pymol(pymol_instance)
+    cmd = pymol_instance.cmd
     
     if size is None:
         width = 0
@@ -85,7 +93,7 @@ def show(size=None, use_ray=False, timeout=60.0, pymol_instance=None):
     return Image(image_file.name)
 
 
-def TimeoutError(Exception):
+class TimeoutError(Exception):
     """
     Exception that is raised after time limit expiry in :func:`show()`.
     """

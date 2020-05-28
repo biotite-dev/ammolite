@@ -14,3 +14,23 @@ from .convert import *
 from .display import *
 from .object import *
 from .startup import *
+from .startup import _get_pymol, _set_pymol
+
+
+def __getattr__(name):
+    if name == "pymol":
+        _pymol = _get_pymol()
+        if _pymol is None:
+            # No PyMOL session has been started yet
+            _pymol = launch_pymol()
+            _set_pymol(_pymol)
+        return _pymol
+    elif name == "cmd":
+        return __getattr__("pymol").cmd
+    elif name in list(globals().keys()):
+        return globals()["name"]
+    else:
+        raise AttributeError(f"module {__name__} has no attribute {name}")
+
+def __dir__():
+    return list(globals().keys()) + ["pymol", "cmd"]
