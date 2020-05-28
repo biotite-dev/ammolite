@@ -556,7 +556,12 @@ class PyMOLObject:
               use distance_exclusion setting
             - ``4`` - Distance between centroids
         """
-        self._cmd.distance(self._into_selection(selection1))
+        self._cmd.distance(
+            name,
+            self._into_selection(selection1),
+            self._into_selection(selection2),
+            mode
+        )
     
     @validate
     def dss(self, selection=None, state=None):
@@ -770,7 +775,8 @@ class PyMOLObject:
         self._cmd.set(name, value, self._into_selection(selection), state)
 
     @validate
-    def set_bond(self, value, selection1=None, selection2=None, state=None):
+    def set_bond(self, name, value, selection1=None, selection2=None,
+                 state=None):
         """
         Change per-bond settings for all bonds which exist
         between two atom selections.
