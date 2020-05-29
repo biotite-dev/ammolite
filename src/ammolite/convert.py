@@ -36,22 +36,11 @@ def convert_to_atom_array(chempy_model, include_bonds=False):
         The converted structure.
     """
     atoms = chempy_model.atom
-
+    
     bonds = chempy_model.bond
 
     
     atom_array = struc.AtomArray(len(atoms))
-
-
-    # Required for later altloc filtering
-    altloc_ids = np.array(
-        [a.alt if hasattr(a, "alt") else "" for a in atoms],
-        dtype="U1"
-    )
-    occupancy = np.array(
-        [a.occupancy if hasattr(a, "occupancy") else 1.0 for a in atoms],
-        dtype=float
-    )
     
     
     # Add annotation arrays
@@ -95,7 +84,7 @@ def convert_to_atom_array(chempy_model, include_bonds=False):
     atom_array.set_annotation(
         "occupancy",
         np.array(
-            [a.occupancy if hasattr(a, "occupancy") else 1.0 for a in atoms],
+            [a.q if hasattr(a, "q") else 1.0 for a in atoms],
             dtype=float
         )
     )
