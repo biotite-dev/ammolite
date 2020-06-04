@@ -57,7 +57,7 @@ or the free and open-source variant with
 
 .. code-block:: console
 
-  $ conda install -c tpeulen pymol-open-source
+  $ conda install -c tpeulen -c conda-forge pymol-open-source
 
 Note that the open-source build is maintained by an individual, so it might
 contain bugs or could not work at all for your system.
