@@ -5,7 +5,6 @@ __all__ = ["PyMOLObject", "NonexistentObjectError", "ModifiedObjectError"]
 from functools import wraps
 import numpy as np
 import biotite.structure as struc
-from pymol import cmd as default_cmd
 from .convert import convert_to_atom_array, convert_to_chempy_model
 from .startup import launch_pymol, _get_pymol, _set_pymol
 
