@@ -16,7 +16,7 @@ via PyMOL's Python API:
 - Use *Biotite*'s boolean masks for atom selection in *PyMOL*.
 - Display images rendered with *PyMOL* in *Jupyter* notebooks.
 
-Have a look at the `example Jupyter notebook <https://github.com/biotite-dev/ammolite/blob/master/doc/examples/cytochrome.ipynb>`_.
+Have a look at the `example Jupyter notebook <https://github.com/biotite-dev/ammolite/blob/master/doc/examples/protein_and_ligand.ipynb>`_.
 
 |
 
