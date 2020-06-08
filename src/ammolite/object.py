@@ -334,7 +334,7 @@ class PyMOLObject:
         else:
             return "none"
     
-    def _into_selection(self, selection):
+    def _into_selection(self, selection, not_none=False):
         """
         Turn a boolean mask into a *PyMOL* selection expression or 
         restrict an selection expression to the current *PyMOL* object.
@@ -344,7 +344,10 @@ class PyMOLObject:
         elif isinstance(selection, str):
             return f"model {self._name} and ({selection})"
         else:
-            return self.where(np.asarray(selection))
+            sel = self.where(np.asarray(selection))
+            if sel == "none" and not_none:
+                raise ValueError("Selection contains no atoms")
+            return sel
 
 
 
@@ -698,7 +701,7 @@ class PyMOLObject:
             *PyMOL* object.
         """
         state = 0 if state is None else state
-        self._cmd.orient(self._into_selection(selection), state)
+        self._cmd.orient(self._into_selection(selection, True), state)
     
     @validate
     def origin(self, selection=None, state=None):
@@ -1050,7 +1053,10 @@ class PyMOLObject:
         """
         state = 0 if state is None else state
         self._cmd.zoom(
-            self._into_selection(selection), buffer, state, int(complete)
+            self._into_selection(selection, True),
+            buffer,
+            state,
+            int(complete)
         )
 
 
