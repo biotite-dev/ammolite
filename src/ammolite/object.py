@@ -542,7 +542,7 @@ class PyMOLObject:
         self._cmd.disable(self._into_selection(selection))
     
     @validate
-    def distance(self, name, selection1, selection2, mode):
+    def distance(self, name, selection1, selection2, cutoff=None, mode=None):
         """
         Create a new distance object between two atom selections.
 
@@ -557,9 +557,9 @@ class PyMOLObject:
             A boolean mask or a *PyMOL* selection expression that
             selects the atoms of this *PyMOL* object to apply the
             command on.
-        cutoff : float
+        cutoff : float, optional
             The longest distance to show.
-        mode: {0, 1, 2, 3, 4}
+        mode: {0, 1, 2, 3, 4}, optional
             
             - ``0`` - All interatomic distances
             - ``1`` - Only bond distances
@@ -572,6 +572,7 @@ class PyMOLObject:
             name,
             self._into_selection(selection1),
             self._into_selection(selection2),
+            cutoff,
             mode
         )
     
