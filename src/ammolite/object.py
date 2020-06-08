@@ -545,7 +545,8 @@ class PyMOLObject:
         self._cmd.disable(self._into_selection(selection))
     
     @validate
-    def distance(self, name, selection1, selection2, cutoff=None, mode=None):
+    def distance(self, name, selection1, selection2, cutoff=None, mode=None,
+                 show_label=True, width=None, length=None, gap=None):
         """
         Create a new distance object between two atom selections.
 
@@ -570,13 +571,23 @@ class PyMOLObject:
             - ``3`` - All interatomic distances,
               use distance_exclusion setting
             - ``4`` - Distance between centroids
+
+        show_label : bool, optional
+            Whether to show the distance as label.
+        width, length, gap : float optional
+            The width and length of each dash and the gap length between
+            the dashes.
         """
         self._cmd.distance(
             name,
             self._into_selection(selection1),
             self._into_selection(selection2),
             cutoff,
-            mode
+            mode,
+            label=int(show_label),
+            width=width,
+            length=length,
+            gap=gap
         )
     
     @validate
