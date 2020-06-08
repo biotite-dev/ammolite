@@ -2,6 +2,7 @@ __name__ = "ammolite"
 __author__ = "Patrick Kunzmann"
 __all__ = ["PyMOLObject", "NonexistentObjectError", "ModifiedObjectError"]
 
+import numbers
 from functools import wraps
 import numpy as np
 import biotite.structure as struc
@@ -268,14 +269,15 @@ class PyMOLObject:
 
 
     @validate
-    def where(self, mask):
+    def where(self, index):
         """
-        Convert a boolean mask for atom selection into a *PyMOL*
+        Convert a *Biotite*-compatible index for atom selection
+        (integer, slice, boolean mask, index array) into a *PyMOL*
         selection expression.
 
         Parameters
         ----------
-        mask : ndarray, dtype=bool
+        index : int or slice or ndarray, dtype=bool or ndarray, dtype=int
             The boolean mask to be converted into a selection string.
         
         Returns
@@ -283,12 +285,23 @@ class PyMOLObject:
         expression : str
             A *PyMOL* compatible selection expression.
         """
-        if len(mask) != self._atom_count:
-            raise IndexError(
-                f"Mask has length {len(mask)}, but the number of atoms in the "
-                f"PyMOL model is {atom_count}"
-            )
-
+        if isinstance(index, numbers.Integral):
+            # PyMOLs indexing starts at 1
+            return f"model {self._name} and index {index}"
+        
+        elif isinstance(index, np.ndarray) and index.dtype == bool:
+            mask = index
+            if len(mask) != self._atom_count:
+                raise IndexError(
+                    f"Mask has length {len(mask)}, but the number of "
+                    f"atoms in the PyMOL model is {atom_count}"
+                )
+        
+        else:
+            # Convert any other index type into a boolean mask
+            mask = np.zeros(self._atom_count, dtype=bool)
+            mask[index] = True
+        
         # Indices where the mask changes from True to False
         # or from False to True
         # The '+1' makes each index refer to the position
