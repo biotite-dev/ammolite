@@ -23,7 +23,7 @@ def show(size=None, use_ray=False, timeout=60.0, pymol_instance=None):
     ----------
     size : tuple of (int, int), optional
         The width and height of the rendered image.
-        By default, the size of the current *PyMOL* viewport is used
+        By default, the size of the current *PyMOL* viewport is used.
     use_ray : bool, optional
         If set to true, the a ray-traced image is created.
         This will also increase the rendering time.
