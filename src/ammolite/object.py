@@ -364,7 +364,8 @@ class PyMOLObject:
         Parameters
         ----------
         selection : str or ndarray, dtype=bool
-            A boolean mask or a *PyMOL* selection expression that
+            A *Biotite* compatible atom selection index,
+            e.g. a boolean mask, or a *PyMOL* selection expression that
             selects the atoms of this *PyMOL* object to apply the
             command on.
         expression : str
@@ -396,8 +397,9 @@ class PyMOLObject:
             - ``'arrow'`` or
             - ``'dumbbell'``.
         
-        selection : str or ndarray, dtype=bool, optional
-            A boolean mask or a *PyMOL* selection expression that
+        selection : str or ndarray, dtype=bool
+            A *Biotite* compatible atom selection index,
+            e.g. a boolean mask, or a *PyMOL* selection expression that
             selects the atoms of this *PyMOL* object to apply the
             command on.
             By default, the command is applied on all atoms of this
@@ -417,7 +419,8 @@ class PyMOLObject:
         Parameters
         ----------
         selection : str or ndarray, dtype=bool, optional
-            A boolean mask or a *PyMOL* selection expression that
+            A *Biotite* compatible atom selection index,
+            e.g. a boolean mask, or a *PyMOL* selection expression that
             selects the atoms of this *PyMOL* object to apply the
             command on.
             By default, the command is applied on all atoms of this
@@ -453,7 +456,8 @@ class PyMOLObject:
         distance : float
             The meaning of this parameter depends on `mode`.
         selection : str or ndarray, dtype=bool, optional
-            A boolean mask or a *PyMOL* selection expression that
+            A *Biotite* compatible atom selection index,
+            e.g. a boolean mask, or a *PyMOL* selection expression that
             selects the atoms of this *PyMOL* object to apply the
             command on.
             By default, the command is applied on all atoms of this
@@ -480,7 +484,8 @@ class PyMOLObject:
             Either a *PyMOL* color name or a tuple containing an RGB
             value (0.0 to 1.0).
         selection : str or ndarray, dtype=bool, optional
-            A boolean mask or a *PyMOL* selection expression that
+            A *Biotite* compatible atom selection index,
+            e.g. a boolean mask, or a *PyMOL* selection expression that
             selects the atoms of this *PyMOL* object to apply the
             command on.
             By default, the command is applied on all atoms of this
@@ -515,7 +520,8 @@ class PyMOLObject:
         Parameters
         ----------
         selection : str or ndarray, dtype=bool, optional
-            A boolean mask or a *PyMOL* selection expression that
+            A *Biotite* compatible atom selection index,
+            e.g. a boolean mask, or a *PyMOL* selection expression that
             selects the atoms of this *PyMOL* object to apply the
             command on.
             By default, the command is applied on all atoms of this
@@ -536,7 +542,8 @@ class PyMOLObject:
         Parameters
         ----------
         selection : str or ndarray, dtype=bool, optional
-            A boolean mask or a *PyMOL* selection expression that
+            A *Biotite* compatible atom selection index,
+            e.g. a boolean mask, or a *PyMOL* selection expression that
             selects the atoms of this *PyMOL* object to apply the
             command on.
             By default, the command is applied on all atoms of this
@@ -558,7 +565,8 @@ class PyMOLObject:
         name : str
             Name of the distance object to create.
         selection1, selection2 : str or ndarray, dtype=bool, optional
-            A boolean mask or a *PyMOL* selection expression that
+            A *Biotite* compatible atom selection index,
+            e.g. a boolean mask, or a *PyMOL* selection expression that
             selects the atoms of this *PyMOL* object to apply the
             command on.
         cutoff : float, optional
@@ -601,7 +609,8 @@ class PyMOLObject:
         Parameters
         ----------
         selection : str or ndarray, dtype=bool, optional
-            A boolean mask or a *PyMOL* selection expression that
+            A *Biotite* compatible atom selection index,
+            e.g. a boolean mask, or a *PyMOL* selection expression that
             selects the atoms of this *PyMOL* object to apply the
             command on.
             By default, the command is applied on all atoms of this
@@ -625,7 +634,8 @@ class PyMOLObject:
         Parameters
         ----------
         selection : str or ndarray, dtype=bool, optional
-            A boolean mask or a *PyMOL* selection expression that
+            A *Biotite* compatible atom selection index,
+            e.g. a boolean mask, or a *PyMOL* selection expression that
             selects the atoms of this *PyMOL* object to apply the
             command on.
             By default, the command is applied on all atoms of this
@@ -662,7 +672,8 @@ class PyMOLObject:
             - ``'cell'``.
 
         selection : str or ndarray, dtype=bool, optional
-            A boolean mask or a *PyMOL* selection expression that
+            A *Biotite* compatible atom selection index,
+            e.g. a boolean mask, or a *PyMOL* selection expression that
             selects the atoms of this *PyMOL* object to apply the
             command on.
             By default, the command is applied on all atoms of this
@@ -681,7 +692,8 @@ class PyMOLObject:
         Parameters
         ----------
         selection : str or ndarray, dtype=bool, optional
-            A boolean mask or a *PyMOL* selection expression that
+            A *Biotite* compatible atom selection index,
+            e.g. a boolean mask, or a *PyMOL* selection expression that
             selects the atoms of this *PyMOL* object to apply the
             command on.
             By default, the command is applied on all atoms of this
@@ -700,7 +712,8 @@ class PyMOLObject:
         Parameters
         ----------
         selection : str or ndarray, dtype=bool
-            A boolean mask or a *PyMOL* selection expression that
+            A *Biotite* compatible atom selection index,
+            e.g. a boolean mask, or a *PyMOL* selection expression that
             selects the atoms of this *PyMOL* object to apply the
             command on.
         text : str
@@ -720,7 +733,8 @@ class PyMOLObject:
         Parameters
         ----------
         selection : str or ndarray, dtype=bool, optional
-            A boolean mask or a *PyMOL* selection expression that
+            A *Biotite* compatible atom selection index,
+            e.g. a boolean mask, or a *PyMOL* selection expression that
             selects the atoms of this *PyMOL* object to apply the
             command on.
             By default, the command is applied on all atoms of this
@@ -744,7 +758,8 @@ class PyMOLObject:
         Parameters
         ----------
         selection : str or ndarray, dtype=bool, optional
-            A boolean mask or a *PyMOL* selection expression that
+            A *Biotite* compatible atom selection index,
+            e.g. a boolean mask, or a *PyMOL* selection expression that
             selects the atoms of this *PyMOL* object to apply the
             command on.
             By default, the command is applied on all atoms of this
@@ -772,7 +787,8 @@ class PyMOLObject:
         name : str
             Name of the selection object to create.
         selection : str or ndarray, dtype=bool, optional
-            A boolean mask or a *PyMOL* selection expression that
+            A *Biotite* compatible atom selection index,
+            e.g. a boolean mask, or a *PyMOL* selection expression that
             selects the atoms of this *PyMOL* object to apply the
             command on.
             By default, the command is applied on all atoms of this
@@ -807,7 +823,8 @@ class PyMOLObject:
         value : object
             The new value for the given setting name.
         selection : str or ndarray, dtype=bool, optional
-            A boolean mask or a *PyMOL* selection expression that
+            A *Biotite* compatible atom selection index,
+            e.g. a boolean mask, or a *PyMOL* selection expression that
             selects the atoms of this *PyMOL* object to apply the
             command on.
             By default, the command is applied on all atoms of this
@@ -846,7 +863,8 @@ class PyMOLObject:
         value : object
             The new value for the given setting name.
         selection1, selection2 : str or ndarray, dtype=bool, optional
-            A boolean mask or a *PyMOL* selection expression that
+            A *Biotite* compatible atom selection index,
+            e.g. a boolean mask, or a *PyMOL* selection expression that
             selects the atoms of this *PyMOL* object to apply the
             command on.
             By default, `selection1` applies to all atoms of this
@@ -894,7 +912,8 @@ class PyMOLObject:
             - ``'cell'``.
 
         selection : str or ndarray, dtype=bool, optional
-            A boolean mask or a *PyMOL* selection expression that
+            A *Biotite* compatible atom selection index,
+            e.g. a boolean mask, or a *PyMOL* selection expression that
             selects the atoms of this *PyMOL* object to apply the
             command on.
             By default, the command is applied on all atoms of this
@@ -932,7 +951,8 @@ class PyMOLObject:
             - ``'cell'``.
 
         selection : str or ndarray, dtype=bool, optional
-            A boolean mask or a *PyMOL* selection expression that
+            A *Biotite* compatible atom selection index,
+            e.g. a boolean mask, or a *PyMOL* selection expression that
             selects the atoms of this *PyMOL* object to apply the
             command on.
             By default, the command is applied on all atoms of this
@@ -952,7 +972,8 @@ class PyMOLObject:
         Parameters
         ----------
         selection : str or ndarray, dtype=bool, optional
-            A boolean mask or a *PyMOL* selection expression that
+            A *Biotite* compatible atom selection index,
+            e.g. a boolean mask, or a *PyMOL* selection expression that
             selects the atoms of this *PyMOL* object to apply the
             command on.
             By default, the command is applied on all atoms of this
@@ -999,7 +1020,8 @@ class PyMOLObject:
             - ``'sphere_transparency'``.
 
         selection : str or ndarray, dtype=bool, optional
-            A boolean mask or a *PyMOL* selection expression that
+            A *Biotite* compatible atom selection index,
+            e.g. a boolean mask, or a *PyMOL* selection expression that
             selects the atoms of this *PyMOL* object to apply the
             command on.
             By default, the command is applied on all atoms of this
@@ -1035,7 +1057,8 @@ class PyMOLObject:
             - ``'stick_transparency'``.
 
         selection1, selection2 : str or ndarray, dtype=bool, optional
-            A boolean mask or a *PyMOL* selection expression that
+            A *Biotite* compatible atom selection index,
+            e.g. a boolean mask, or a *PyMOL* selection expression that
             selects the atoms of this *PyMOL* object to apply the
             command on.
             By default, `selection1` applies to all atoms of this
@@ -1066,7 +1089,8 @@ class PyMOLObject:
         Parameters
         ----------
         selection : str or ndarray, dtype=bool, optional
-            A boolean mask or a *PyMOL* selection expression that
+            A *Biotite* compatible atom selection index,
+            e.g. a boolean mask, or a *PyMOL* selection expression that
             selects the atoms of this *PyMOL* object to apply the
             command on.
             By default, the command is applied on all atoms of this
