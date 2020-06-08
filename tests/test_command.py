@@ -83,6 +83,11 @@ expr = "resi 1-10"
         
         ("indicate", {
         }),
+
+        ("label", {
+           "selection": mask,
+           "text": "Some text"
+        }),
         
         ("orient", {
         }),

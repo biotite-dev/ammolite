@@ -32,6 +32,7 @@ PyMOLObject API
   .. automethod:: enable
   .. automethod:: hide
   .. automethod:: indicate
+  .. automethod:: label
   .. automethod:: orient
   .. automethod:: origin
   .. automethod:: select

@@ -271,7 +271,7 @@ class PyMOLObject:
     @validate
     def where(self, index):
         """
-        Convert a *Biotite*-compatible index for atom selection
+        Convert a *Biotite*-compatible atom selection index
         (integer, slice, boolean mask, index array) into a *PyMOL*
         selection expression.
 
@@ -688,6 +688,25 @@ class PyMOLObject:
             *PyMOL* object.
         """
         self._cmd.indicate(self._into_selection(selection))
+    
+    @validate
+    def label(self, selection, text):
+        """
+        Label the selected atoms.
+
+        This method is a thin wrapper around the *PyMOL* ``label()``
+        command.
+
+        Parameters
+        ----------
+        selection : str or ndarray, dtype=bool
+            A boolean mask or a *PyMOL* selection expression that
+            selects the atoms of this *PyMOL* object to apply the
+            command on.
+        text : str
+            The label text.
+        """
+        self._cmd.label(self._into_selection(selection), f'"{text}"')
     
     @validate
     def orient(self, selection=None, state=None):

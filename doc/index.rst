@@ -286,6 +286,7 @@ The following commands are supported as instance methods:
 - :meth:`PyMOLObject.enable()`
 - :meth:`PyMOLObject.hide()`
 - :meth:`PyMOLObject.indicate()`
+- :meth:`PyMOLObject.label()`
 - :meth:`PyMOLObject.orient()`
 - :meth:`PyMOLObject.origin()`
 - :meth:`PyMOLObject.select()`
