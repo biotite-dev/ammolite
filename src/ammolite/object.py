@@ -964,7 +964,7 @@ class PyMOLObject:
             By default, the command is applied on all atoms of this
             *PyMOL* object.
         """
-        self._cmd.show(representation, self._into_selection(selection))
+        self._cmd.show_as(representation, self._into_selection(selection))
     
     @validate
     def smooth(self, selection=None, passes=1, window=5,
