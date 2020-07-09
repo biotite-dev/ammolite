@@ -88,13 +88,19 @@ class PyMOLObject:
         
         self._name = name
         self._pymol = pymol_instance
-        self.delete = delete
+        self._delete = delete
         self._cmd = pymol_instance.cmd
         self._check_existence()
         self._atom_count = self._cmd.count_atoms(f"model {self._name}")
 
     def __del__(self):
-        self._cmd.delete(self._name)
+        if self._delete:
+            try:
+                # Try to delete this object from PyMOL
+                # Fails if PyMOL itself is already garbage collected
+                self._cmd.delete(self._name)
+            except:
+                pass
 
 
 
