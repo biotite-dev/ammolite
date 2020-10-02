@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ammolite"
-version = "0.4.0"
+version = "0.4.1"
 description = "Visualize structure data from Biotite with PyMOL"
 readme = "README.rst"
 license = "BSD-3-Clause"
