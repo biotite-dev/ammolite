@@ -33,34 +33,24 @@ via *PyMOL*'s Python API:
 Installation
 ------------
 
-*Ammolite* can be installed via *pip*:
+Conda installation
+^^^^^^^^^^^^^^^^^^
+
+The simplest and recommended way to install *Ammolite* along with open-source
+*PyMOL* is via the *Conda* package manager:
 
 .. code-block:: console
 
+  $ conda install -c conda-forge ammolite
+
+If you prefer the proprietary version of *PyMOL*, you can install *PyMOL* via
+*Conda* and *Ammolite* via *pip*.
+
+.. code-block:: console
+
+  $ conda install -c schrodinger pymol-bundle
   $ pip install ammolite
 
-However, *PyMOL* (at least version 2.0) must also be installed and needs to be
-importable by your Python interpreter:
-
-PyMOL installation via Conda
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The simplest and recommended way to install *PyMOL* in combination with
-*Ammolite* is via the *Conda* package manager.
-Either install the proprietary version with
-
-.. code-block:: console
-
-  $ conda install -c schrodinger pymol
-
-or the free and open-source variant with
-
-.. code-block:: console
-
-  $ conda install -c tpeulen -c conda-forge pymol-open-source
-
-Note that the open-source build is maintained by an individual, so it might
-contain bugs or could not work at all for your system.
 
 PyMOL installation from pymol.org
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -78,7 +68,7 @@ or add the path directly in your Python script.
 .. code-block:: python
 
   import sys
-  sys.path.insert(0, "/path/to/pymol/lib/python3.7/site-packages")
+  sys.path.insert(0, "/path/to/pymol/lib/python3.x/site-packages")
 
 
 Note that this only works, if the Python version of your *PyMOL* installation
