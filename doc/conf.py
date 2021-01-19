@@ -58,8 +58,6 @@ html_css_files = [
 ]
 html_favicon = "static/assets/ammolite_icon_32p.png"
 htmlhelp_basename = "AmmoliteDoc"
-# No sidebar
-html_sidebars = {"**": []}
 html_theme_options = {
     "description"   : "From Biotite to PyMOL - and back again",
     "logo"          : "assets/ammolite_logo.svg",
