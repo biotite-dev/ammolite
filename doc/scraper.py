@@ -72,3 +72,4 @@ def overwrite_display_func(gallery_conf, fname):
         return image_file.name
 
     ammolite.show = show
+    ammolite.cmd.reinitialize()
