@@ -8,6 +8,9 @@ Each chain is colored individually based on a qualitative *Matplotlib*
 colormap.
 """
 
+# Code source: Patrick Kunzmann
+# License: CC0
+
 import numpy as np
 import matplotlib.pyplot as plt
 import biotite.structure as struc

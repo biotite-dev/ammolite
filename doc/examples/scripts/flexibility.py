@@ -10,6 +10,9 @@ states, this script could also be applied to the frames of a molecular dynamics
 trajectory.
 """
 
+# Code source: Patrick Kunzmann
+# License: CC0
+
 import numpy as np
 import matplotlib.pyplot as plt
 import biotite

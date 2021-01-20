@@ -6,6 +6,9 @@ This example shows a *ball-and-stick* model of the beta-lactam antibiotic
 ampicillin.
 """
 
+# Code source: Patrick Kunzmann
+# License: CC0
+
 import biotite.structure as struc
 import biotite.structure.info as info
 import ammolite

@@ -3,6 +3,9 @@ Hydrogen bonds between biotin and streptavidin
 ==============================================
 """
 
+# Code source: Patrick Kunzmann
+# License: CC0
+
 import numpy as np
 from matplotlib.colors import to_rgb
 import biotite

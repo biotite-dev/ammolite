@@ -6,6 +6,8 @@ This examples highlights the histidine residue of cytochrome C that binds to
 its heme ligand.
 """
 
+# Code source: Patrick Kunzmann
+# License: CC0
 
 import numpy as np
 from matplotlib.colors import to_rgb
