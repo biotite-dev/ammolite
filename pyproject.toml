@@ -35,6 +35,7 @@ biotite = ">= 0.22"
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
 sphinx = "^3.0"
+sphinx-gallery = "0.7.0"
 numpydoc = ">= 0.8"
 matplotlib = ">=2.0"
 

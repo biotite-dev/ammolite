@@ -7,13 +7,17 @@ __author__ = "Patrick Kunzmann"
 from os.path import realpath, dirname, join, basename
 import sys
 
-
 # Include 'src/' in PYTHONPATH
-# in order to import the 'biotite' package
+# in order to import the 'Ammolite' package
 doc_path = dirname(realpath(__file__))
 package_path = join(dirname(doc_path), "src")
 sys.path.insert(0, package_path)
 import ammolite
+
+# Include ammolite/doc in PYTHONPATH
+# in order to import modules for example generation etc.
+sys.path.insert(0, doc_path)
+import scraper
 
 
 #### General ####
@@ -23,6 +27,7 @@ extensions = ["sphinx.ext.autodoc",
               "sphinx.ext.doctest",
               "sphinx.ext.mathjax",
               "sphinx.ext.viewcode",
+              "sphinx_gallery.gen_gallery",
               "numpydoc"]
 
 templates_path = ["templates"]
@@ -65,4 +70,18 @@ html_theme_options = {
     "github_user"   : "biotite-dev",
     "github_repo"   : "ammolite",
     "github_banner" : "true",
+}
+sphinx_gallery_conf = {
+    "examples_dirs"             : "examples/scripts",
+    "gallery_dirs"              : "examples/gallery",
+    'filename_pattern'          : "",
+    "download_section_examples" : False,
+    # Never report run time
+    "min_reported_time"         : sys.maxsize,
+    "image_scrapers"            : (scraper.pymol_scraper,),
+    # Replace 'ammolite.show()'
+    "reset_modules"             : (scraper.overwrite_display_func,),
+    # Do not capture file path string output
+    # by the overwritten 'ammolite.show()'
+    "capture_repr"              : (),
 }
