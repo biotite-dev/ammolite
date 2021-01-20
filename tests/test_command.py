@@ -139,10 +139,6 @@ expr = "resi 1-10"
     ]
 )
 def test_command(command_name, kwargs):
-    ###
-    if command_name == "":
-        return
-    ###
     pdbx_file = pdbx.PDBxFile.read(join(data_dir, "1l2y.cif"))
     structure = pdbx.get_structure(pdbx_file)
     structure.bonds = struc.connect_via_residue_names(structure)
