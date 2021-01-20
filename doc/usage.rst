@@ -61,7 +61,7 @@ Launching PyMOL directly
   This is not the recommended way to use *Ammolite*.
   Usage is at your own risk. 
 
-You can also *PyMOL* directly using the *PyMOL* Python API, that
+You can also launch *PyMOL* directly using the *PyMOL* Python API, that
 :func:`launch_pymol()` and :func:`launch_interactive_pymol()` use internally.
 In this case, it is important to call :func:`setup_parameters()` for setting
 parameters that are necessary for *Ammolite* to interact properly with *PyMOL*.
@@ -168,7 +168,7 @@ These methods accept boolean masks directly, without the need to call
   pymol_object = ammolite.PyMOLObject.from_structure(atom_array)
   pymol_object.show_as("sticks", atom_array.res_id == 42)
 
-When no selection is given, these methods are applied all atoms from the
+When no selection is given, these methods are applied to all atoms from the
 respective *PyMOL* object.
 
 The following commands are supported as instance methods:
