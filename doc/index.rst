@@ -25,7 +25,7 @@ via *PyMOL*'s Python API:
 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :hidden:
    
    install

@@ -16,9 +16,6 @@ def pymol_scraper(block, block_vars, gallery_conf):
         # a string representing a file name
         # Since this output is not assigned to any variable, it is
         # internally assigned to the '___' variable
-        print("\n")
-        print(globals[NO_ASSIGN])
-        print("\n")
         if NO_ASSIGN in globals and isinstance(globals[NO_ASSIGN], str):
             image_path = globals[NO_ASSIGN]
             # Copy the images into the 'gallery' directory under a canonical
@@ -73,3 +70,4 @@ def overwrite_display_func(gallery_conf, fname):
 
     ammolite.show = show
     ammolite.cmd.reinitialize()
+    ammolite.setup_parameters(ammolite.pymol)
