@@ -2,6 +2,7 @@
   :height: 200px
   :align: center
 
+|
 
 Ammolite - From Biotite to PyMOL and back again
 ===============================================
