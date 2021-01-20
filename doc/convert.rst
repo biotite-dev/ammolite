@@ -1,5 +1,3 @@
-.. include:: logo.rst
-
 Model conversion API
 --------------------
 

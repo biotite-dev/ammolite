@@ -1,5 +1,3 @@
-.. include:: logo.rst
-
 PyMOL launching API
 -------------------
 
