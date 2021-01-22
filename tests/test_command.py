@@ -3,8 +3,8 @@ import numpy as np
 import pytest
 import biotite.structure as struc
 import biotite.structure.io.pdbx as pdbx
-from ammolite import PyMOLObject
-from .util import data_dir, launch_pymol_for_test
+from ammolite import PyMOLObject, reset
+from .util import data_dir
 
 
 pdbx_file = pdbx.PDBxFile.read(join(data_dir, "1l2y.cif"))
@@ -139,10 +139,10 @@ expr = "resi 1-10"
     ]
 )
 def test_command(command_name, kwargs):
+    reset()
     pdbx_file = pdbx.PDBxFile.read(join(data_dir, "1l2y.cif"))
     structure = pdbx.get_structure(pdbx_file)
     structure.bonds = struc.connect_via_residue_names(structure)
-    launch_pymol_for_test()
     pymol_obj = PyMOLObject.from_structure(structure)
     command = getattr(PyMOLObject, command_name)
     command(pymol_obj, **kwargs)

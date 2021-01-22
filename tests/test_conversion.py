@@ -6,8 +6,8 @@ import pytest
 import biotite.structure as struc
 import biotite.structure.io.pdbx as pdbx
 from pymol import cmd
-from ammolite import PyMOLObject, convert_to_chempy_model
-from .util import data_dir, launch_pymol_for_test
+from ammolite import PyMOLObject, convert_to_chempy_model, reset
+from .util import data_dir
 
 
 @pytest.mark.parametrize(
@@ -23,7 +23,7 @@ def test_to_biotite(path, altloc, state):
     pdbx_file = pdbx.PDBxFile.read(path)
     ref_array = pdbx.get_structure(pdbx_file, model=state, altloc=altloc)
     
-    launch_pymol_for_test()
+    reset()
     cmd.load(path, "test")
     test_array = PyMOLObject("test").to_structure(state=state, altloc=altloc)
 
@@ -40,7 +40,7 @@ def test_to_biotite(path, altloc, state):
 
 @pytest.mark.parametrize("path", glob.glob(join(data_dir, "*.cif")))
 def test_to_pymol(path):
-    launch_pymol_for_test()
+    reset()
     cmd.load(path, "test")
     ref_model = cmd.get_model("test", 1)
     
@@ -82,7 +82,7 @@ def test_both_directions(path, state):
     ref_array = pdbx.get_structure(pdbx_file, model=state)
     ref_array.bonds = struc.connect_via_residue_names(ref_array)
 
-    launch_pymol_for_test()
+    reset()
     test_array = PyMOLObject.from_structure(ref_array) \
                             .to_structure(state=state, include_bonds=True)
     
