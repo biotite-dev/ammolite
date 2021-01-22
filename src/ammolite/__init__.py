@@ -17,6 +17,8 @@ from .startup import *
 from .startup import _get_pymol, _set_pymol
 
 
+# Make the PyMOL instance accessible via `ammolite.pymol`
+# analogous to a '@property' of a class, but on module level instead
 def __getattr__(name):
     if name == "pymol":
         _pymol = _get_pymol()
