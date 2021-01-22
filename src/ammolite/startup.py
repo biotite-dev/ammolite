@@ -1,7 +1,7 @@
 __name__ = "ammolite"
 __author__ = "Patrick Kunzmann"
-__all__ = ["launch_pymol", "launch_interactive_pymol", "setup_parameters",
-           "DuplicatePyMOLException"]
+__all__ = ["launch_pymol", "launch_interactive_pymol", "reset",
+           "setup_parameters", "DuplicatePyMOLException"]
 
 
 _pymol = None
@@ -89,14 +89,32 @@ def launch_interactive_pymol(*args):
             raise DuplicatePyMOLException(
                 "PyMOL is already running in library mode"
             )
-        pymol.cmd.reinitialize()
-        setup_parameters(pymol)
+        else:
+            raise DuplicatePyMOLException(
+                "A PyMOL instance is already running"
+            )
     else:
         pymol.finish_launching(["pymol"] + list(args))
         _pymol = pymol
         pymol.cmd.reinitialize()
         setup_parameters(_pymol)
     return pymol
+
+
+def reset():
+    """
+    Delete all objects in the PyMOL workspace and reset parameters to
+    defaults.
+
+    If *PyMOL* is not yet running, launch *PyMOL* in object-oriented
+    library mode.
+    """
+    global _pymol
+
+    if _pymol is None: 
+        _pymol = launch_pymol()
+    _pymol.cmd.reinitialize()
+    setup_parameters(_pymol)
 
 
 def setup_parameters(pymol_instance):
