@@ -32,7 +32,7 @@ def __getattr__(name):
     elif name in list(globals().keys()):
         return globals()["name"]
     else:
-        raise AttributeError(f"module {__name__} has no attribute {name}")
+        raise AttributeError(f"module '{__name__}' has no attribute '{name}'")
 
 def __dir__():
     return list(globals().keys()) + ["pymol", "cmd"]
