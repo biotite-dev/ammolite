@@ -70,6 +70,8 @@ html_theme_options = {
     "github_user"   : "biotite-dev",
     "github_repo"   : "ammolite",
     "github_banner" : "true",
+    "github_type"   : "star",
+    "fixed_sidebar" : "true",
 }
 sphinx_gallery_conf = {
     "examples_dirs"             : "examples/scripts",
