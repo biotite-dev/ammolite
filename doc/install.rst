@@ -24,8 +24,8 @@ PyMOL installation from pymol.org
 ---------------------------------
 
 Otherwise, if you have downloaded the *PyMOL* binary from
-`<https://pymol.org/>`_, add the install location the ``$PYTHONPATH`` path
-variable:
+`pymol.org <https://pymol.org/>`_, add the install location the ``$PYTHONPATH``
+path variable:
 
 .. code-block:: console
 
