@@ -33,3 +33,4 @@ via *PyMOL*'s Python API:
    usage
    apidoc
    examples/gallery/index
+   issues
