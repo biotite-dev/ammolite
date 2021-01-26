@@ -1,0 +1,45 @@
+notifications:
+  on_success: never
+  on_failure: never
+
+language: generic
+os: linux
+dist: focal
+sudo: false
+env:
+  - PY_VERSION='3.8'
+
+install:
+  - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+  - bash Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  - conda create -q -n ammolite-dev python=$PY_VERSION
+  - conda install -n ammolite-dev -c conda-forge pymol-open-source poetry
+  - source activate ammolite-dev
+  - poetry install
+
+script:
+  - pytest
+
+before_deploy:
+  - poetry build
+  - sphinx-build ./doc ./build/doc
+  - cd ./build
+  - zip -r doc.zip doc
+  - cd ..
+  - mv ./build/doc.zip ./dist/doc.zip
+
+deploy:
+  provider: releases
+  api-key:
+    secure: ncH32tO1V1vJMgpHY/JJ+TDpFkj0uFzNVeD2tBFq+uCDSRzQo8hiC+kFveciQNr9UuKFyqBySFpjP+g93f9xWcjruzTbT42vhoM6YzddMcQI/yiINWoco1Lk8RZpv6HsWeLXPFzP6BWWwBH+1rF09AXX4hk5nHGOlawM+f1nwCoqZrvPc5mhfN/JytRgUjjVZ1yI9VL77wMakGYsuuBpgjpk1AC5bG2X0aCYSRub7kAl3CYPvrknx38pbtL8d9mMyFwLe1UVxuyhY5PZ1hzk+6Dkjwx0mWQ95TCoTOwPU2ECF81gORVd/HZeQ/xRPYb8mlufy+v7pjUgMRQVMwjRR+e3JYHxoAjbN41WUYZohyIeVGnQ9hlaa59EHoDyGL6hJFqJ2o7E5DoKCGE+ssQ/pAmczPMCf3lG4nhgA80WXo9fcchMqPqB1uX43gv+qWvLy3N8V+pzK9nQpUsjKXKROp5fABIaz56APUaq1UrzaAvPHUlNiixjWd7FCU9nDGig8vGSfGNumBUFOQHnS12eQ0ICzTK7z9SuigkEAkB236AiopD5d0fZyyz9hWvWua22wqBD4kwtIQczFos5JHibv1taWdtnxs+/XAJpcV6EWYdTpNEItejRjtPRv20Ddx+G3176aYKbXWrANk/F4sp/HgGaLR7xUiH1wabd6QS5OUE=
+  file:
+    - dist/*
+    - doc/_build/doc.zip
+  file_glob: true
+  on:
+    repo: biotite-dev/ammolite
+    tags: true
+  skip_cleanup: true
