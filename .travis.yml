@@ -41,4 +41,4 @@ deploy:
   on:
     repo: biotite-dev/ammolite
     tags: true
-  cleanup: false
+  skip_cleanup: true
