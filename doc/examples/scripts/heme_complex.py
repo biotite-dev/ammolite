@@ -58,7 +58,7 @@ ammolite.show(PNG_SIZE)
 ########################################################################
 
 # Style heme group
-heme_mask = (cyt_c.res_name == "HEM")
+heme_mask = (cyt_c.res_name == "HEC")
 
 pymol_cyt_c.show_as("sticks", heme_mask)
 pymol_cyt_c.color("lightorange", heme_mask & (cyt_c.element == "C"))
