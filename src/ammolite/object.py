@@ -300,7 +300,7 @@ class PyMOLObject:
             if len(mask) != self._atom_count:
                 raise IndexError(
                     f"Mask has length {len(mask)}, but the number of "
-                    f"atoms in the PyMOL model is {atom_count}"
+                    f"atoms in the PyMOL model is {self._atom_count}"
                 )
         
         else:
