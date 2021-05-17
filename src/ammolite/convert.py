@@ -12,6 +12,17 @@ from chempy.models import Indexed as IndexedModel
 from chempy import Atom, Bond
 
 
+BOND_ORDER = {
+    struc.BondType.ANY: 1,
+    struc.BondType.SINGLE: 1,
+    struc.BondType.DOUBLE: 2,
+    struc.BondType.TRIPLE: 3,
+    struc.BondType.QUADRUPLE: 4,
+    struc.BondType.AROMATIC_SINGLE: 1,
+    struc.BondType.AROMATIC_DOUBLE: 2,
+}
+
+
 def convert_to_atom_array(chempy_model, include_bonds=False):
     """
     Convert a :class:`chempy.models.Indexed`
@@ -182,18 +193,10 @@ def convert_to_chempy_model(atom_array):
     
 
     if atom_array.bonds is not None:
-        for i, j, order in atom_array.bonds.as_array():
+        for i, j, bond_type in atom_array.bonds.as_array():
             bond = Bond()
-
-            if order != 0:
-                bond.order = order
-            else:
-                # If bond order is not defined,
-                # use a single bond as default
-                bond.order = 1
-            
+            bond.order = BOND_ORDER[bond_type]
             bond.index = [i, j]
-
             model.add_bond(bond)
     else:
         warnings.warn(

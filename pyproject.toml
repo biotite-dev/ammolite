@@ -30,7 +30,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.7"
-biotite = ">= 0.22"
+biotite = ">= 0.28"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
