@@ -5,4 +5,6 @@ Model conversion API
 
 .. autofunction:: convert_to_chempy_model
 
+|
+
 .. autofunction:: convert_to_atom_array
