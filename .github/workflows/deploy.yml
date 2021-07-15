@@ -1,0 +1,65 @@
+name: Building and deploying Ammolite
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch: {}
+
+jobs:
+  build-distribution:
+    name: Building distribution
+
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          activate-environment: ammolite-dev
+          auto-update-conda: true
+          python-version: '3.9'
+      - name: Installing dependencies
+        run: conda install -c conda-forge pymol-open-source poetry
+      - name: Building distributions
+        run: poetry build
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Ammolite distribution
+          path: dist/*
+          if-no-files-found: error
+  
+  
+  build-doc:
+    name: Building documentation
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          activate-environment: ammolite-dev
+          auto-update-conda: true
+          python-version: '3.9'
+      - name: Installing dependencies
+        run: conda install -c conda-forge pymol-open-source poetry
+      - name: Installing Ammolite
+        run: poetry install
+      - name: Building documentation
+        run: sphinx-build ./doc ./build/doc
+      - name: Building documentation
+        run: sphinx-build ./doc ./build/doc
+      - name: Zipping documentation
+        run: cd ./build; zip -r doc.zip doc; cd ..
+      - name: Moving documentation
+        run: mv ./build/doc.zip ./dist/doc.zip
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Ammolite documentation
+          path: dist/doc.zip
+          if-no-files-found: error

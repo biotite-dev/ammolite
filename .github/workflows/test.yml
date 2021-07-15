@@ -1,0 +1,28 @@
+name: Testing Ammolite
+
+on: [push, pull_request]
+
+jobs:
+  test-thorough:
+    name: Testing
+
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          activate-environment: ammolite-dev
+          auto-update-conda: true
+          python-version: '3.9'
+      - name: Installing dependencies
+        run: conda install -c conda-forge pymol-open-source poetry pytest
+      - name: Building distribution
+        run: poetry build -f wheel
+      - name: Installing distribution
+        run: pip install ./dist/*.whl
+      - name: Testing code
+        run: pytest
