@@ -35,7 +35,7 @@ source_suffix = [".rst"]
 master_doc = "index"
 
 project = "ammolite"
-copyright = "2020, the Biotite contributors. " \
+copyright = "2020, the Ammolite contributors. " \
             "PyMOL is a trademark of Schrodinger, LLC"
 version = ammolite.__version__
 
