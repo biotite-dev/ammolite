@@ -4,10 +4,8 @@ __all__ = ["convert_to_atom_array", "convert_to_chempy_model"]
 
 import warnings
 import numpy as np
-import biotite
 from biotite.sequence import ProteinSequence
 import biotite.structure as struc
-import pymol
 from chempy.models import Indexed as IndexedModel
 from chempy import Atom, Bond
 
