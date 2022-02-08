@@ -56,6 +56,10 @@ expr = "resi 1-10"
         ("color", {
             "color": [0.0, 1.0, 1.0],
         }),
+        ("color", {
+            "color": [0.0, 1.0, 1.0],
+            "representation": "surface",
+        }),
         
         # Not available in Open Source PyMOL
         #("desaturate", {

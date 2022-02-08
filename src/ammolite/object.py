@@ -477,12 +477,70 @@ class PyMOLObject:
         self._cmd.clip(mode, distance, self._into_selection(selection), state)
     
     @validate
-    def color(self, color, selection=None):
+    def color(self, color, selection=None, representation=None):
         """
         Change the color of atoms.
 
         This method is a thin wrapper around the *PyMOL* ``color()``
-        command.
+        or ``set("xxx_color")`` command.
+
+        Parameters
+        ----------
+        color : str or tuple(float, float, float)
+            Either a *PyMOL* color name or a tuple containing an RGB
+            value (0.0 to 1.0).
+        selection : str or int or slice or ndarray, dtype=bool or ndarray, dtype=int, optional
+            A *Biotite* compatible atom selection index,
+            e.g. a boolean mask, or a *PyMOL* selection expression that
+            selects the atoms of this *PyMOL* object to apply the
+            command on.
+            By default, the command is applied on all atoms of this
+            *PyMOL* object.
+        representation : {"sphere", "surface", "mesh", "dot", "cartoon", "ribbon"}, optional
+            Colors only the given representation by internally calling
+            ``set("xxx_color")``.
+            By default, all representations are affected, i.e. ``color()``
+            is called internally.
+        
+        Notes
+        -----
+        If an RGB color is given, the color is registered as a unique
+        named color via the ``set_color()`` command.
+        """
+        if not isinstance(color, str):
+            color_name = f"ammolite_color_{PyMOLObject._color_counter}"
+            PyMOLObject._color_counter += 1
+            self._cmd.set_color(color_name, tuple(color))
+        else:
+            color_name = color
+            registered = [name for name, _ in self._cmd.get_color_indices()]
+            if color_name not in registered:
+                raise ValueError(
+                    f"Unknown color '{color_name}'"
+                )
+        
+        if representation is None:
+            self._cmd.color(color_name, self._into_selection(selection))
+        else:
+            if representation not in (
+                "sphere", "surface", "mesh", "dot", "cartoon", "ribbon"
+            ):
+                raise ValueError(
+                    f"'{representation}' is not a supported representation"
+                )
+            self._cmd.set(
+                f"{representation}_color",
+                color_name, self._into_selection(selection)
+            )
+    
+    
+    @validate
+    def surface_color(self, color, selection=None):
+        """
+        Change the color of displayed surfaces.
+
+        This method is a thin wrapper around *PyMOL*
+        ``set("surface_color")``.
 
         Parameters
         ----------
@@ -502,18 +560,10 @@ class PyMOLObject:
         If an RGB color is given, the color is registered as a unique
         named color via the ``set_color()`` command.
         """
-        if not isinstance(color, str):
-            color_name = f"ammolite_color_{PyMOLObject._color_counter}"
-            PyMOLObject._color_counter += 1
-            self._cmd.set_color(color_name, tuple(color))
-        else:
-            color_name = color
-            registered = [name for name, _ in self._cmd.get_color_indices()]
-            if color_name not in registered:
-                raise ValueError(
-                    f"Unknown color '{color_name}'"
-                )
-        self._cmd.color(color_name, self._into_selection(selection))
+        color_name = self._created_named_color(color)
+        self._cmd.set(
+            "surface_color", color_name, self._into_selection(selection)
+        )
 
     @validate
     def desaturate(self, selection=None, a=0.5):
