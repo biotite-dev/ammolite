@@ -91,4 +91,8 @@ def test_both_directions(path, state):
             test_array.get_annotation(cat) == ref_array.get_annotation(cat)
         ).all()
     assert np.allclose(test_array.coord, ref_array.coord)
-    assert test_array.bonds == ref_array.bonds
+    
+    # PyMOL does not distinguish between 'normal' and aromatic bonds
+    test_array.bonds.remove_aromaticity()
+    ref_array.bonds.remove_aromaticity()
+    assert test_array.bonds.as_set() == ref_array.bonds.as_set()
