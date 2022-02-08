@@ -58,8 +58,7 @@ html_theme = "alabaster"
 html_static_path = ["static"]
 html_css_files = [
     "biotite.css",
-    "https://fonts.googleapis.com/css?" \
-        "family=Crete+Round|Fira+Sans|&display=swap",
+    "fonts.css",
 ]
 html_favicon = "static/assets/ammolite_icon_32p.png"
 htmlhelp_basename = "AmmoliteDoc"
@@ -77,7 +76,7 @@ sphinx_gallery_conf = {
     "examples_dirs"             : "examples/scripts",
     "gallery_dirs"              : "examples/gallery",
     'filename_pattern'          : "",
-    "download_section_examples" : False,
+    "download_all_examples" : False,
     # Never report run time
     "min_reported_time"         : sys.maxsize,
     "image_scrapers"            : (scraper.pymol_scraper,),
