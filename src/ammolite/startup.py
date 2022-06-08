@@ -1,6 +1,7 @@
 __name__ = "ammolite"
 __author__ = "Patrick Kunzmann"
-__all__ = ["launch_pymol", "launch_interactive_pymol", "reset",
+__all__ = ["get_and_set_pymol_instance",
+           "launch_pymol", "launch_interactive_pymol", "reset",
            "setup_parameters", "DuplicatePyMOLException"]
 
 
@@ -10,6 +11,9 @@ _pymol = None
 def get_and_set_pymol_instance(pymol_instance=None):
     """
     Get the global *PyMOL* instance.
+
+    This function is intended for internal purposes and should only be 
+    used for advanced usages.
 
     Parameters
     ----------

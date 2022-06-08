@@ -10,11 +10,12 @@ __version__ = "0.7.0"
 __name__ = "ammolite"
 __author__ = "Patrick Kunzmann"
 
+from .cgo import *
 from .convert import *
 from .display import *
 from .object import *
+from .shapes import *
 from .startup import *
-from .startup import get_and_set_pymol_instance
 
 
 # Make the PyMOL instance accessible via `ammolite.pymol`
