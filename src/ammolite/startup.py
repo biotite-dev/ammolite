@@ -6,11 +6,42 @@ __all__ = ["launch_pymol", "launch_interactive_pymol", "reset",
 
 _pymol = None
 
-def _get_pymol():
-    return _pymol
 
-def _set_pymol(pymol):
-    _pymol = pymol
+def get_and_set_pymol_instance(pymol_instance=None):
+    """
+    Get the global *PyMOL* instance.
+
+    Parameters
+    ----------
+    pymol_instance : module or SingletonPyMOL, optional
+        If a *PyMOL* instance is given here, the global instance is set
+        to this instance.
+        If *PyMOL* is already running and both instances are not the
+        same, an exception is raised.
+        By default *PyMOL* is started in library mode, if no *PyMOL*
+        instance is currently running.
+    
+    Returns
+    -------
+    pymol_instance : module or SingletonPyMOL
+        The global *PyMOL* instance.
+    """
+    global _pymol
+    if pymol_instance is None:
+        if not is_launched():
+            _pymol = launch_pymol()
+        return _pymol
+    elif _pymol is None:
+        if not hasattr(pymol_instance, "cmd"):
+            raise TypeError("Given object is not a PyMOL instance")
+        _pymol = pymol_instance
+    elif _pymol is not pymol_instance:
+        # Both the global pymol instance and the given instance are not
+        # the same -> duplicate PyMOL instances
+        raise DuplicatePyMOLException(
+            "A PyMOL instance is already running"
+        )
+    return _pymol
 
 
 def is_launched():
@@ -50,7 +81,7 @@ def launch_pymol():
     from pymol2 import SingletonPyMOL
     global _pymol
 
-    if _pymol is not None:
+    if is_launched():
         raise DuplicatePyMOLException(
             "A PyMOL instance is already running"
         )
@@ -84,7 +115,7 @@ def launch_interactive_pymol(*args):
     import pymol
     global _pymol
 
-    if _pymol is not None:
+    if is_launched():
         if _pymol is not pymol:
             raise DuplicatePyMOLException(
                 "PyMOL is already running in library mode"
@@ -111,7 +142,7 @@ def reset():
     """
     global _pymol
 
-    if _pymol is None: 
+    if not is_launched(): 
         _pymol = launch_pymol()
     _pymol.cmd.reinitialize()
     setup_parameters(_pymol)

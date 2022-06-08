@@ -7,7 +7,7 @@ from functools import wraps
 import numpy as np
 import biotite.structure as struc
 from .convert import convert_to_atom_array, convert_to_chempy_model
-from .startup import launch_pymol, _get_pymol, _set_pymol
+from .startup import get_and_set_pymol_instance
 
 
 def validate(method):
@@ -79,17 +79,10 @@ class PyMOLObject:
     
 
     def __init__(self, name, pymol_instance=None, delete=True):
-        if pymol_instance is None:
-            pymol_instance = _get_pymol()
-            if pymol_instance is None:
-                # No PyMOL session has been started yet
-                pymol_instance = launch_pymol()
-                _set_pymol(pymol_instance)
-        
         self._name = name
-        self._pymol = pymol_instance
+        self._pymol = get_and_set_pymol_instance(pymol_instance)
         self._delete = delete
-        self._cmd = pymol_instance.cmd
+        self._cmd = self._pymol.cmd
         self._check_existence()
         self._atom_count = self._cmd.count_atoms(f"model {self._name}")
 
@@ -131,12 +124,7 @@ class PyMOLObject:
             removed from the *PyMOL* session, when this object is
             garbage collected.
         """
-        if pymol_instance is None:
-            pymol_instance = _get_pymol()
-            if pymol_instance is None:
-                # No PyMOL session has been started yet
-                pymol_instance = launch_pymol()
-                _set_pymol(pymol_instance)
+        pymol_instance = get_and_set_pymol_instance(pymol_instance)
         cmd = pymol_instance.cmd
 
         if name is None:

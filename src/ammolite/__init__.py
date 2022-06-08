@@ -14,19 +14,14 @@ from .convert import *
 from .display import *
 from .object import *
 from .startup import *
-from .startup import _get_pymol, _set_pymol
+from .startup import get_and_set_pymol_instance
 
 
 # Make the PyMOL instance accessible via `ammolite.pymol`
 # analogous to a '@property' of a class, but on module level instead
 def __getattr__(name):
     if name == "pymol":
-        _pymol = _get_pymol()
-        if _pymol is None:
-            # No PyMOL session has been started yet
-            _pymol = launch_pymol()
-            _set_pymol(_pymol)
-        return _pymol
+        return get_and_set_pymol_instance()
     elif name == "cmd":
         return __getattr__("pymol").cmd
     elif name in list(globals().keys()):

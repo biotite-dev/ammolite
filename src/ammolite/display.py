@@ -5,8 +5,8 @@ __all__ = ["show", "TimeoutError"]
 import tempfile
 import time
 import datetime
-from os.path import join, getsize
-from .startup import launch_pymol, _get_pymol, _set_pymol
+from os.path import getsize
+from .startup import get_and_set_pymol_instance
 
 
 INTERVAL = 0.1
@@ -49,12 +49,7 @@ def show(size=None, use_ray=False, timeout=60.0, pymol_instance=None):
     except ImportError:
         raise ImportError("IPython is not installed")
 
-    if pymol_instance is None:
-        pymol_instance = _get_pymol()
-        if pymol_instance is None:
-            # No PyMOL session has been started yet
-            pymol_instance = launch_pymol()
-            _set_pymol(pymol_instance)
+    pymol_instance = get_and_set_pymol_instance(pymol_instance)
     cmd = pymol_instance.cmd
     
     if size is None:
