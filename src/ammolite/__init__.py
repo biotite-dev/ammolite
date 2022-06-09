@@ -6,7 +6,7 @@
 Visualize structure data from Biotite with PyMOL.
 """
 
-__version__ = "0.7.0"
+__version__ = "0.8.0"
 __name__ = "ammolite"
 __author__ = "Patrick Kunzmann"
 
