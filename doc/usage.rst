@@ -199,6 +199,47 @@ The following commands are supported as instance methods:
 - :meth:`PyMOLObject.zoom()`
 
 
+Drawing custom shapes
+---------------------
+
+In addition to visualization of molecules *PyMOL* is capable of drawing
+arbitrary geometric shapes using *compiled graphics objects* (CGOs).
+A CGO (for example a sphere) is represented by a list of floating point values.
+*Ammolite* supports a range of CGOs, that can be created conveniently using
+the following functions.
+
+- :func:`get_cylinder_cgo()`
+- :func:`get_cone_cgo()`
+- :func:`get_sphere_cgo()`
+
+One or multiple of the CGOs obtained this way can be drawn with
+:func:`draw_cgo()`.
+For example, to draw two spheres connected by a line (a cylinder) and
+a color gradient from red to blue, you can call
+
+.. code-block:: python
+
+  RED = (1, 0, 0)
+  BLUE = (0, 0, 1)
+  
+  ammolite.draw_cgo([
+      ammolite.get_sphere_cgo(
+          pos=(0, 0, 0), radius=1.0, color=RED
+      ),
+      ammolite.get_cylinder_cgo(
+          start=(0, 0, 0), end=(5, 0, 0), radius=0.5,
+          start_color=RED, end_color=BLUE
+      ),
+      ammolite.get_sphere_cgo(
+          pos=(5, 0, 0), radius=1.0, color=BLUE
+      ),
+  ])
+
+For convenience, the following shapes can be drawn, that rely on a combination
+of CGOs:
+
+- :func:`draw_arrows()`
+
 Jupyter notebook support
 ------------------------
 

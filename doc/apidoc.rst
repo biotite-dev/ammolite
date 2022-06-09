@@ -7,4 +7,5 @@ API Reference
   startup
   model
   convert
+  shapes
   display
