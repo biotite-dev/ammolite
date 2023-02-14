@@ -1,9 +1,11 @@
 __name__ = "ammolite"
 __author__ = "Patrick Kunzmann"
-__all__ = ["draw_arrows"]
+__all__ = ["draw_arrows", "draw_box"]
 
 import numpy as np
-from .cgo import draw_cgo, get_cylinder_cgo, get_cone_cgo
+from .cgo import (
+    _arrayfy, draw_cgo, get_cylinder_cgo, get_cone_cgo, get_multiline_cgo
+)
 
 
 def draw_arrows(start, end, radius=0.1, head_radius=0.20,
@@ -80,10 +82,60 @@ def draw_arrows(start, end, radius=0.1, head_radius=0.20,
     draw_cgo(cgo_list, name, pymol_instance)
 
 
-def _arrayfy(value, length, min_dim):
-    value = np.array(value, ndmin=min_dim)
-    if len(value) == 1 and length > 1:
-        value = np.repeat(value, length, axis=0)
-    elif len(value) != length:
-        raise IndexError(f"Expected {length} values, but got {len(value)}")
-    return value
+def draw_box(box, color=(0, 1, 0), width=1.0, origin=None,
+             name=None, pymol_instance=None):
+    """
+    Draw a box using *Compiled Graphics Objects*
+    (CGOs).
+
+    This can be used to draw the unit cell or periodic box of an
+    :class:`AtomArray`.
+
+    Parameters
+    ----------
+    box : array-like, shape=(3,3)
+        The three box vectors.
+    color : array-like, shape=(3,), optional
+        The color of the box, given as RGB
+        values in the range *(0, 1)*.
+    name : str, optional
+        The name of the newly created CGO object.
+        If omitted, a unique name is generated.
+    pymol_instance : module or SingletonPyMOL or PyMOL, optional
+        If *PyMOL* is used in library mode, the :class:`PyMOL`
+        or :class:`SingletonPyMOL` object is given here.
+        If otherwise *PyMOL* is used in GUI mode, the :mod:`pymol`
+        module is given.
+        By default the currently used *PyMOL* instance
+        (``ammolite.pymol``) is used.
+        If no *PyMOL* instance is currently running,
+        *PyMOL* is started in library mode.
+    """
+    box = np.asarray(box)
+    if origin is None:
+        origin = np.zeros(3)
+    else:
+        origin = np.asarray(origin)
+    
+    starts = []
+    ends = []
+    for direction_dim in (0,1,2):
+        plane_dim1, plane_dim2 = [
+            dim for dim in (0,1,2) if dim != direction_dim
+        ]
+        starts.append(origin)
+        ends.append(  origin + box[direction_dim])
+
+        starts.append(origin + box[plane_dim1])
+        ends.append(  origin + box[plane_dim1] + box[direction_dim])
+
+        starts.append(origin + box[plane_dim2])
+        ends.append(  origin + box[plane_dim2] + box[direction_dim])
+
+        starts.append(origin + box[plane_dim1] + box[plane_dim2])
+        ends.append(  origin + box[plane_dim1] + box[plane_dim2] + box[direction_dim])
+
+    draw_cgo(
+        [get_multiline_cgo(starts, ends, color, width)],
+        name, pymol_instance
+    )

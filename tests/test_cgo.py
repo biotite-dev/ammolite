@@ -1,15 +1,24 @@
 import pytest
 from ammolite import reset, draw_cgo, \
-                     get_cylinder_cgo, get_cone_cgo, get_sphere_cgo
+                     get_cylinder_cgo, get_cone_cgo, get_sphere_cgo, \
+                     get_point_cgo, get_line_cgo, get_multiline_cgo
 
 @pytest.mark.parametrize("cgo_func, param", [
     (get_cylinder_cgo, [(0,0,0), (1,1,1), 5, (1,1,1), (1,1,1)]),
     (get_cone_cgo, [(0,0,0), (1,1,1), 5, 10, (1,1,1), (1,1,1), True, True]),
     (get_sphere_cgo, [(0,0,0), 5, (1,1,1)]),
+    (get_point_cgo, [[(0,0,0), (1,1,1)], (1,1,1)]),
+    (get_point_cgo, [[(0,0,0), (1,1,1)], [(1,1,1), (1,1,1)]]),
+    (get_line_cgo, [[(0,0,0), (1,1,1)], (1,1,1)]),
+    (get_line_cgo, [[(0,0,0), (1,1,1)], [(1,1,1), (1,1,1)]]),
+    (get_multiline_cgo, [(0,0,0), (2,2,2), (1,1,1)]),
+    (get_multiline_cgo, [[(0,0,0), (1,1,1)], [(2,2,2), (3,3,3)], (1,1,1)]),
+    (get_multiline_cgo, [[(0,0,0), (1,1,1)], [(2,2,2), (3,3,3)], [(1,1,1), (1,1,1)]]),
 ])
 def test_draw_single_cgo(cgo_func, param):
     """
     Test drawing a single CGO.
+    Only the absence of exceptions is tested.
     """
     reset()
     draw_cgo([cgo_func(*param)])

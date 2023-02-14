@@ -211,6 +211,9 @@ the following functions.
 - :func:`get_cylinder_cgo()`
 - :func:`get_cone_cgo()`
 - :func:`get_sphere_cgo()`
+- :func:`get_point_cgo()`
+- :func:`get_line_cgo()`
+- :func:`get_multiline_cgo()`
 
 One or multiple of the CGOs obtained this way can be drawn with
 :func:`draw_cgo()`.
@@ -239,6 +242,7 @@ For convenience, the following shapes can be drawn, that rely on a combination
 of CGOs:
 
 - :func:`draw_arrows()`
+- :func:`draw_box()`
 
 Jupyter notebook support
 ------------------------

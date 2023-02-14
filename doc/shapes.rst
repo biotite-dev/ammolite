@@ -11,6 +11,14 @@ Compiled graphics object API
 
 .. autofunction:: get_sphere_cgo
 
+.. autofunction:: get_point_cgo
+
+.. autofunction:: get_line_cgo
+
+.. autofunction:: get_multiline_cgo
+
 |
 
 .. autofunction:: draw_arrows
+
+.. autofunction:: draw_box
