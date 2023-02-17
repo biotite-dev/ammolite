@@ -19,7 +19,7 @@ jobs:
           auto-update-conda: true
           python-version: '3.9'
       - name: Installing dependencies
-        run: conda install -c conda-forge pymol-open-source poetry pytest
+        run: conda install -c conda-forge pymol-open-source "poetry>=1.3" pytest
       - name: Building distribution
         run: poetry build -f wheel
       - name: Installing distribution
