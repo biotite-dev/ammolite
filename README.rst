@@ -1,3 +1,5 @@
+**The content of this package has been integrated into `biotite.interface.pymol`**
+
 .. image:: https://raw.githubusercontent.com/biotite-dev/ammolite/master/doc/static/assets/ammolite_logo_s.png
   :alt: Ammolite logo
   :align: center
